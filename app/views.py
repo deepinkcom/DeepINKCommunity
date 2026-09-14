@@ -1,45 +1,79 @@
-"""
-Definition of views.
-"""
-
 from datetime import datetime
-from django.shortcuts import render
+
 from django.http import HttpRequest
+from django.shortcuts import render
+
 
 def home(request):
-    """Renders the home page."""
+    """Display the public homepage."""
     assert isinstance(request, HttpRequest)
+
     return render(
         request,
-        'app/index.html',
+        "app/index.html",
         {
-            'title':'Home Page',
-            'year':datetime.now().year,
-        }
+            "title": "Home",
+            "year": datetime.now().year,
+            "active_page": "home",
+        },
     )
 
-def contact(request):
-    """Renders the contact page."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/contact.html',
-        {
-            'title':'Contact',
-            'message':'Your contact page.',
-            'year':datetime.now().year,
-        }
-    )
 
 def about(request):
-    """Renders the about page."""
+    """Display the About Us page."""
     assert isinstance(request, HttpRequest)
+
     return render(
         request,
-        'app/about.html',
+        "app/about.html",
         {
-            'title':'About',
-            'message':'Your application description page.',
-            'year':datetime.now().year,
-        }
+            "title": "About Us",
+            "year": datetime.now().year,
+            "active_page": "about",
+        },
+    )
+
+
+def programmes(request):
+    """Display the programmes page."""
+    assert isinstance(request, HttpRequest)
+
+    return render(
+        request,
+        "app/programmes.html",
+        {
+            "title": "Our Programmes",
+            "year": datetime.now().year,
+            "active_page": "programmes",
+        },
+    )
+
+
+def get_involved(request):
+    """Display the Get Involved page."""
+    assert isinstance(request, HttpRequest)
+
+    return render(
+        request,
+        "app/get_involved.html",
+        {
+            "title": "Get Involved",
+            "year": datetime.now().year,
+            "active_page": "get_involved",
+        },
+    )
+
+
+def contact(request):
+    """Display the Contact page."""
+    assert isinstance(request, HttpRequest)
+
+    return render(
+        request,
+        "app/contact.html",
+        {
+            "title": "Contact",
+            "year": datetime.now().year,
+            "active_page": "contact",
+        },
     )

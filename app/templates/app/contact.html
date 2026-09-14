@@ -1,20 +1,309 @@
 {% extends "app/layout.html" %}
+{% load static %}
 
 {% block content %}
 
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
+<!-- Contact Hero -->
+        <section class="contact-hero">
+            <div class="container">
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+                <div class="contact-hero-content">
+                    <p class="section-label">GET IN TOUCH</p>
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+                    <h1>Contact Us</h1>
+
+                    <p>
+                        We would like to hear from you. Contact Deep Ink
+                        Community Centre with your questions, enquiries or
+                        partnership proposals.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Content -->
+        <section class="contact-section">
+            <div class="container">
+
+                <div class="row g-4">
+
+                    <!-- Contact Form -->
+                    <div class="col-lg-7">
+                        <div class="contact-form-container">
+
+                            <div class="contact-heading">
+                                <p class="section-label">SEND A MESSAGE</p>
+                                <h2>How can we help?</h2>
+
+                                <p>
+                                    Complete the form and a member of the Deep
+                                    Ink team will respond when possible.
+                                </p>
+                            </div>
+
+                            <form class="public-form contact-form" id="contactForm">
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <label for="contactFirstName">
+                                            First name
+                                        </label>
+
+                                        <input type="text" id="contactFirstName" name="firstName" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="contactLastName">
+                                            Last name
+                                        </label>
+
+                                        <input type="text" id="contactLastName" name="lastName" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="contactEmail">
+                                            Email address
+                                        </label>
+
+                                        <input type="email" id="contactEmail" name="email" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="contactPhone">
+                                            Phone number
+                                        </label>
+
+                                        <input type="tel" id="contactPhone" name="phone">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="contactSubject">
+                                            Subject
+                                        </label>
+
+                                        <select id="contactSubject" name="subject" required>
+                                            <option value="">
+                                                Select a subject
+                                            </option>
+
+                                            <option value="general">
+                                                General enquiry
+                                            </option>
+
+                                            <option value="programme">
+                                                Programme enquiry
+                                            </option>
+
+                                            <option value="support">
+                                                Support enquiry
+                                            </option>
+
+                                            <option value="volunteer">
+                                                Volunteering
+                                            </option>
+
+                                            <option value="partnership">
+                                                Partnership
+                                            </option>
+
+                                            <option value="other">
+                                                Other
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="contactMessage">
+                                            Message
+                                        </label>
+
+                                        <textarea id="contactMessage" name="message" rows="6" required></textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="consent-field">
+                                            <input type="checkbox" name="consent" required>
+
+                                            <span>
+                                                I consent to Deep Ink using my
+                                                information to respond to this
+                                                enquiry.
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button class="primary-button form-button" type="submit">
+                                            <i class="bi bi-send"></i>
+                                            Send Message
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="col-lg-5">
+                        <aside class="contact-sidebar">
+
+                            <div class="contact-information-card">
+                                <p class="section-label">CONTACT DETAILS</p>
+
+                                <h2>Contact information</h2>
+
+                                <p class="contact-information-introduction">
+                                    The organisation’s confirmed details will
+                                    be added before the website is published.
+                                </p>
+
+                                <div class="contact-detail">
+                                    <div class="contact-detail-icon">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </div>
+
+                                    <div>
+                                        <h3>Address</h3>
+                                        <p>Address to be confirmed</p>
+                                    </div>
+                                </div>
+
+                                <div class="contact-detail">
+                                    <div class="contact-detail-icon">
+                                        <i class="bi bi-telephone-fill"></i>
+                                    </div>
+
+                                    <div>
+                                        <h3>Phone</h3>
+                                        <p>Phone number to be confirmed</p>
+                                    </div>
+                                </div>
+
+                                <div class="contact-detail">
+                                    <div class="contact-detail-icon">
+                                        <i class="bi bi-envelope-fill"></i>
+                                    </div>
+
+                                    <div>
+                                        <h3>Email</h3>
+                                        <p>Email address to be confirmed</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Operating Hours -->
+                            <div class="operating-hours-card">
+                                <div class="operating-hours-icon">
+                                    <i class="bi bi-clock"></i>
+                                </div>
+
+                                <div>
+                                    <h3>Operating Hours</h3>
+
+                                    <p>
+                                        Operating days and hours to be
+                                        confirmed.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Support Card -->
+                            <div class="contact-support-card">
+                                <div class="contact-support-icon">
+                                    <i class="bi bi-heart-fill"></i>
+                                </div>
+
+                                <div>
+                                    <h3>Do you need support?</h3>
+
+                                    <p>
+                                        Submit an application so the team can
+                                        review the assistance you require.
+                                    </p>
+
+                                    <a href="{% url 'get_involved' %}#support-form">
+                                        Apply for Support
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </aside>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Location -->
+        <section class="location-section">
+            <div class="container">
+
+                <div class="section-title-centred">
+                    <p class="section-label">OUR LOCATION</p>
+                    <h2>Find Deep Ink</h2>
+
+                    <p>
+                        A Google Maps location will be displayed here once the
+                        organisation confirms its official address.
+                    </p>
+                </div>
+
+                <div class="map-placeholder">
+                    <div>
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <h3>Deep Ink Community Centre</h3>
+                        <p>Location to be confirmed</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="contact-actions-section">
+            <div class="container">
+
+                <div class="row g-4">
+
+                    <div class="col-md-4">
+                        <a class="contact-action-card" href="{% url 'programmes' %}">
+                            <i class="bi bi-book"></i>
+
+                            <div>
+                                <h3>View Programmes</h3>
+                                <p>Learn more about our community services.</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-4">
+                        <a class="contact-action-card pink-action" href="{% url 'get_involved' %}#volunteer-form">
+                            <i class="bi bi-person-heart"></i>
+
+                            <div>
+                                <h3>Volunteer</h3>
+                                <p>Share your skills with our community.</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-4">
+                        <a class="contact-action-card" href="{% url 'get_involved' %}#support-form">
+                            <i class="bi bi-heart"></i>
+
+                            <div>
+                                <h3>Get Support</h3>
+                                <p>Submit an application for assistance.</p>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
 
 {% endblock %}

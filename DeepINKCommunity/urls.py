@@ -62,5 +62,10 @@ urlpatterns = [
     path(
         '',
         include('dashboard.urls')
-    )
+    ),
+
+    path(
+        '',
+        include('app.urls')
+        ),
 ]

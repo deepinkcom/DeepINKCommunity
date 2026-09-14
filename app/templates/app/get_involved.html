@@ -1,0 +1,506 @@
+{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero -->
+        <section class="page-hero get-involved-hero">
+            <div class="container">
+                <div class="row align-items-center g-5">
+
+                    <div class="col-lg-5">
+                        <p class="section-label">MAKE A DIFFERENCE</p>
+
+                        <h1>Get Involved</h1>
+
+                        <p class="page-hero-description">
+                            There are many ways to help strengthen our
+                            community. Apply for support, volunteer your skills
+                            or partner with Deep Ink.
+                        </p>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <img class="page-hero-image" src="{% static 'app/images/hero-home.png' %}"
+                            alt="People participating in a community programme">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Involvement Options -->
+        <section class="involvement-options">
+            <div class="container">
+
+                <div class="section-title-centred">
+                    <p class="section-label">CHOOSE AN OPTION</p>
+
+                    <h2>How would you like to get involved?</h2>
+
+                    <p>
+                        Select the option that best matches how Deep Ink can
+                        assist you or how you would like to contribute.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- Support -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="involvement-card">
+
+                            <div class="involvement-icon aqua-icon">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </div>
+
+                            <h3>Apply for Support</h3>
+
+                            <p>
+                                Tell us what assistance you need and our team
+                                will review your application.
+                            </p>
+
+                            <ul>
+                                <li>Education support</li>
+                                <li>Development opportunities</li>
+                                <li>Community assistance</li>
+                                <li>Service referrals</li>
+                            </ul>
+
+                            <a class="primary-button" href="#support-form">
+                                Start Application
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Volunteer -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="involvement-card pink-card">
+
+                            <div class="involvement-icon pink-icon">
+                                <i class="bi bi-person-heart"></i>
+                            </div>
+
+                            <h3>Become a Volunteer</h3>
+
+                            <p>
+                                Share your knowledge, time and skills with the
+                                community.
+                            </p>
+
+                            <ul>
+                                <li>Assist with programmes</li>
+                                <li>Support community events</li>
+                                <li>Share professional skills</li>
+                                <li>Participate in outreach</li>
+                            </ul>
+
+                            <a class="secondary-button" href="#volunteer-form">
+                                Volunteer Form
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Partner -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="involvement-card">
+
+                            <div class="involvement-icon aqua-icon">
+                                <i class="bi bi-diagram-3"></i>
+                            </div>
+
+                            <h3>Partner With Us</h3>
+
+                            <p>
+                                Work with Deep Ink to expand opportunities and
+                                create a lasting community impact.
+                            </p>
+
+                            <ul>
+                                <li>Programme partnerships</li>
+                                <li>Resource contributions</li>
+                                <li>Skills and knowledge sharing</li>
+                                <li>Community collaboration</li>
+                            </ul>
+
+                            <a class="primary-button" href="{% url 'contact' %}">
+                                Contact Our Team
+                            </a>
+
+                        </article>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Application Form -->
+        <section class="application-section" id="support-form">
+            <div class="container">
+
+                <div class="row g-5">
+
+                    <div class="col-lg-5">
+                        <p class="section-label">REQUEST ASSISTANCE</p>
+
+                        <h2>Apply for support</h2>
+
+                        <p class="form-introduction">
+                            Complete this form to tell Deep Ink about the
+                            assistance you require. A staff member will review
+                            the application and contact you.
+                        </p>
+
+                        <div class="information-box">
+                            <i class="bi bi-shield-check"></i>
+
+                            <div>
+                                <h3>Your information matters</h3>
+
+                                <p>
+                                    Personal information will only be used to
+                                    assess your request and provide relevant
+                                    assistance.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <form class="public-form" id="supportApplication">
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+                                    <label for="supportFirstName">
+                                        First name
+                                    </label>
+
+                                    <input type="text" id="supportFirstName" name="firstName" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="supportLastName">
+                                        Last name
+                                    </label>
+
+                                    <input type="text" id="supportLastName" name="lastName" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="supportEmail">
+                                        Email address
+                                    </label>
+
+                                    <input type="email" id="supportEmail" name="email" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="supportPhone">
+                                        Phone number
+                                    </label>
+
+                                    <input type="tel" id="supportPhone" name="phone" required>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="supportType">
+                                        Type of support
+                                    </label>
+
+                                    <select id="supportType" name="supportType" required>
+                                        <option value="">
+                                            Select an option
+                                        </option>
+
+                                        <option value="education">
+                                            Education support
+                                        </option>
+
+                                        <option value="youth">
+                                            Youth development
+                                        </option>
+
+                                        <option value="entrepreneurship">
+                                            Entrepreneurship support
+                                        </option>
+
+                                        <option value="community">
+                                            Community support
+                                        </option>
+
+                                        <option value="referral">
+                                            Referral assistance
+                                        </option>
+
+                                        <option value="other">
+                                            Other
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="supportMessage">
+                                        Tell us what assistance you need
+                                    </label>
+
+                                    <textarea id="supportMessage" name="message" rows="5" required></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="consent-field">
+                                        <input type="checkbox" name="consent" required>
+
+                                        <span>
+                                            I consent to Deep Ink storing and
+                                            processing the information provided
+                                            in this application.
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-12">
+                                    <button class="primary-button form-button" type="submit">
+                                        Submit Application
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Volunteer Form -->
+        <section class="application-section volunteer-section" id="volunteer-form">
+            <div class="container">
+
+                <div class="row g-5">
+
+                    <div class="col-lg-5">
+                        <p class="section-label">SHARE YOUR SKILLS</p>
+
+                        <h2>Become a volunteer</h2>
+
+                        <p class="form-introduction">
+                            Complete the form to tell us more about yourself,
+                            your skills and how you would like to assist Deep
+                            Ink Community Centre.
+                        </p>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <form class="public-form" id="volunteerApplication">
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+                                    <label for="volunteerFirstName">
+                                        First name
+                                    </label>
+
+                                    <input type="text" id="volunteerFirstName" name="firstName" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="volunteerLastName">
+                                        Last name
+                                    </label>
+
+                                    <input type="text" id="volunteerLastName" name="lastName" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="volunteerEmail">
+                                        Email address
+                                    </label>
+
+                                    <input type="email" id="volunteerEmail" name="email" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="volunteerPhone">
+                                        Phone number
+                                    </label>
+
+                                    <input type="tel" id="volunteerPhone" name="phone" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="volunteerInterest">
+                                        Area of interest
+                                    </label>
+
+                                    <select id="volunteerInterest" name="interest" required>
+                                        <option value="">
+                                            Select an option
+                                        </option>
+
+                                        <option value="education">
+                                            Education
+                                        </option>
+
+                                        <option value="youth">
+                                            Youth development
+                                        </option>
+
+                                        <option value="events">
+                                            Events
+                                        </option>
+
+                                        <option value="outreach">
+                                            Community outreach
+                                        </option>
+
+                                        <option value="administration">
+                                            Administration
+                                        </option>
+
+                                        <option value="other">
+                                            Other
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="volunteerAvailability">
+                                        Availability
+                                    </label>
+
+                                    <select id="volunteerAvailability" name="availability" required>
+                                        <option value="">
+                                            Select an option
+                                        </option>
+
+                                        <option value="weekdays">
+                                            Weekdays
+                                        </option>
+
+                                        <option value="weekends">
+                                            Weekends
+                                        </option>
+
+                                        <option value="events">
+                                            Special events only
+                                        </option>
+
+                                        <option value="flexible">
+                                            Flexible
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="volunteerSkills">
+                                        Skills and experience
+                                    </label>
+
+                                    <textarea id="volunteerSkills" name="skills" rows="4" required></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="volunteerMotivation">
+                                        Why would you like to volunteer?
+                                    </label>
+
+                                    <textarea id="volunteerMotivation" name="motivation" rows="4" required></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="cons=" consent-field">
+                                        <input type="checkbox" name="consent" required>
+
+                                        <span>
+                                            I consent to Deep Ink storing and
+                                            processing the information provided
+                                            in this application.
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-12">
+                                    <button class="secondary-button form-button" type="submit">
+                                        Submit Volunteer Form
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Frequently Asked Questions -->
+        <section class="faq-section">
+            <div class="container">
+
+                <div class="section-title-centred">
+                    <p class="section-label">FREQUENTLY ASKED QUESTIONS</p>
+                    <h2>How can we help?</h2>
+                </div>
+
+                <div class="accordion" id="frequentlyAskedQuestions">
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#questionOne">
+                                Who can apply for support?
+                            </button>
+                        </h3>
+
+                        <div id="questionOne" class="accordion-collapse collapse show"
+                            data-bs-parent="#frequentlyAskedQuestions">
+                            <div class="accordion-body">
+                                Community members who need assistance relating
+                                to Deep Ink’s programmes may submit an
+                                application for review.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#questionTwo">
+                                How can I volunteer?
+                            </button>
+                        </h3>
+
+                        <div id="questionTwo" class="accordion-collapse collapse"
+                            data-bs-parent="#frequentlyAskedQuestions">
+                            <div class="accordion-body">
+                                Complete the volunteer form and tell us about
+                                your skills, interests and availability.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#questionThree">
+                                Can organisations become partners?
+                            </button>
+                        </h3>
+
+                        <div id="questionThree" class="accordion-collapse collapse"
+                            data-bs-parent="#frequentlyAskedQuestions">
+                            <div class="accordion-body">
+                                Yes. Organisations can contact Deep Ink to
+                                discuss programme, resource and community
+                                partnership opportunities.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+{% endblock %}

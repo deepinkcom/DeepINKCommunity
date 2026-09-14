@@ -1,33 +1,322 @@
 {% extends "app/layout.html" %}
+{% load static %}
 
 {% block content %}
 
-<div class="jumbotron">
-    <h1>Django</h1>
-    <p class="lead">Django is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            Django gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
+            <div class="col-lg-6 hero-content">
+                <p class="hero-label">
+                    DEEP INK COMMUNITY CENTRE
+                </p>
+
+                <h1>
+                    Empowering people.
+                    <span>Strengthening communities.</span>
+                </h1>
+
+                <p class="hero-description">
+                    We support education, youth development,
+                    entrepreneurship, empowerment and community outreach.
+                </p>
+
+                <div class="hero-buttons">
+                    <a class="primary-button" href="{% url 'get_involved' %}#support-form">
+                        <i class="bi bi-heart-fill"></i>
+                        Apply for Support
+                    </a>
+
+                    <a class="secondary-button" href="{% url 'get_involved' %}#volunteer-form">
+                        <i class="bi bi-people-fill"></i>
+                        Become a Volunteer
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-6 hero-image-container">
+                <img class="hero-image" src="{% static 'app/images/hero-home.png' %}"
+                    alt="Young people participating in a community programme">
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Programmes Section -->
+<section class="programmes-section">
+    <div class="container">
+
+        <div class="section-heading">
+            <div>
+                <p class="section-label">WHAT WE DO</p>
+                <h2>Our Programmes</h2>
+            </div>
+
+            <a class="text-link" href="{% url 'programmes' %}">
+                View all programmes
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-3">
+                <article class="programme-card">
+                    <div class="programme-icon aqua-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+
+                    <h3>Education Support</h3>
+
+                    <p>
+                        Helping learners access educational resources,
+                        applications and learning opportunities.
+                    </p>
+
+                    <a href="{% url 'programmes' %}">
+                        Learn more
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </article>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <article class="programme-card">
+                    <div class="programme-icon pink-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <h3>Youth Development</h3>
+
+                    <p>
+                        Building confidence, practical skills and leadership
+                        among young people.
+                    </p>
+
+                    <a href="{% url 'programmes' %}">
+                        Learn more
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </article>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <article class="programme-card">
+                    <div class="programme-icon aqua-icon">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+
+                    <h3>Entrepreneurship</h3>
+
+                    <p>
+                        Providing training and support to emerging
+                        entrepreneurs and small businesses.
+                    </p>
+
+                    <a href="{% url 'programmes' %}">
+                        Learn more
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </article>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <article class="programme-card">
+                    <div class="programme-icon pink-icon">
+                        <i class="bi bi-heart"></i>
+                    </div>
+
+                    <h3>Community Outreach</h3>
+
+                    <p>
+                        Connecting families to support services, referrals and
+                        community opportunities.
+                    </p>
+
+                    <a href="{% url 'programmes' %}">
+                        Learn more
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </article>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Impact Section -->
+<section class="impact-section">
+    <div class="container">
+
+        <div class="section-title-centred">
+            <p class="section-label">OUR COMMUNITY</p>
+            <h2>Creating a lasting impact</h2>
+
+            <p>
+                Working together to provide opportunities and build stronger
+                communities.
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="impact-card">
+                    <div class="impact-icon aqua-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+
+                    <h3>People Supported</h3>
+
+                    <p>
+                        Community members receiving assistance.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="impact-card">
+                    <div class="impact-icon pink-icon">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+
+                    <h3>Youth Empowered</h3>
+
+                    <p>
+                        Young people developing valuable skills.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="impact-card">
+                    <div class="impact-icon aqua-icon">
+                        <i class="bi bi-diagram-3"></i>
+                    </div>
+
+                    <h3>Partnerships</h3>
+
+                    <p>
+                        Organisations working alongside Deep Ink.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="impact-card">
+                    <div class="impact-icon pink-icon">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+
+                    <h3>Communities Reached</h3>
+
+                    <p>
+                        Areas reached through community programmes.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="statistics-note">
+            Verified statistics will be displayed once they have been
+            provided by Deep Ink Community Centre.
         </p>
-        <p><a class="btn btn-default" href="https://djangobook.com/django-tutorials/">Learn more &raquo;</a></p>
+
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>The Python Package Index is a repository of software for the Python programming language.</p>
-        <p><a class="btn btn-default" href="https://pypi.org/">Learn more &raquo;</a></p>
+</section>
+
+<!-- Upcoming Events -->
+<section class="events-section">
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-5">
+                <p class="section-label">UPCOMING EVENTS</p>
+
+                <h2>Connect, learn and grow with our community</h2>
+
+                <p class="events-introduction">
+                    Deep Ink hosts workshops, awareness programmes,
+                    educational activities and community events.
+                </p>
+
+                <a class="primary-button" href="{% url 'programmes' %}">
+                    View Our Programmes
+                </a>
+            </div>
+
+            <div class="col-lg-7">
+                <article class="event-card">
+
+                    <div class="event-date">
+                        <span>DATE</span>
+                        <strong>TBC</strong>
+                    </div>
+
+                    <div class="event-information">
+                        <p class="event-category">
+                            COMMUNITY PROGRAMME
+                        </p>
+
+                        <h3>Upcoming Deep Ink Event</h3>
+
+                        <p>
+                            Details about the next community event will be
+                            published here when confirmed.
+                        </p>
+
+                        <div class="event-details">
+                            <span>
+                                <i class="bi bi-clock"></i>
+                                Time to be confirmed
+                            </span>
+
+                            <span>
+                                <i class="bi bi-geo-alt"></i>
+                                Venue to be confirmed
+                            </span>
+                        </div>
+                    </div>
+
+                </article>
+            </div>
+
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Microsoft Azure</h2>
-        <p>You can easily publish to Microsoft Azure using Visual Studio. Find out how you can host your application using a free trial today.</p>
-        <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
+</section>
+
+<!-- Get Involved Banner -->
+<section class="get-involved-section">
+    <div class="container">
+
+        <div class="get-involved-banner">
+
+            <div class="banner-icon">
+                <i class="bi bi-heart-fill"></i>
+            </div>
+
+            <div class="banner-content">
+                <h2>Together, we can make a difference.</h2>
+
+                <p>
+                    Apply for support, volunteer your skills or partner with
+                    Deep Ink Community Centre.
+                </p>
+            </div>
+
+            <a class="banner-button" href="{% url 'get_involved' %}">
+                Get Involved
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
     </div>
-</div>
+</section>
 
 {% endblock %}
