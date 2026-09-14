@@ -1,0 +1,798 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Deep INK</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f2f4f5;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #18384a;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 245px;
+            height: 100vh;
+            background: #18384a;
+            color: white;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+            .sidebar-brand img {
+                width: 75px;
+                height: auto;
+                margin-bottom: 10px;
+            }
+
+            .sidebar-brand h1 {
+                font-size: 19px;
+                margin: 0;
+            }
+
+            .sidebar-brand p {
+                margin: 4px 0 0;
+                font-size: 11px;
+                color: #b9d4d4;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+        .sidebar-nav {
+            padding: 18px 12px;
+        }
+
+        .nav-section {
+            margin: 18px 10px 8px;
+            color: #8fb4b4;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 13px;
+            margin-bottom: 3px;
+            border-radius: 7px;
+            color: #e9f0f1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+            .sidebar-nav a:hover,
+            .sidebar-nav a.active {
+                background: #286d6d;
+                color: white;
+            }
+
+        .sidebar-nav i {
+            width: 19px;
+            font-size: 16px;
+        }
+
+        .logout-form {
+            margin-top: 20px;
+            padding: 0 12px 20px;
+        }
+
+        .logout-button {
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: transparent;
+            color: white;
+            padding: 10px;
+            border-radius: 7px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+            .logout-button:hover {
+                background: #8a3b3b;
+                border-color: #8a3b3b;
+            }
+
+        .main-content {
+            margin-left: 245px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e1e5e7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .topbar h2 {
+                margin: 0;
+                font-size: 23px;
+                font-weight: 600;
+            }
+
+            .topbar p {
+                margin: 4px 0 0;
+                color: #718087;
+                font-size: 13px;
+            }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e1f0f0;
+            color: #286d6d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: #718087;
+        }
+
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        .welcome-card {
+            background: #18384a;
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+            .welcome-card h3 {
+                margin: 0;
+                font-size: 22px;
+            }
+
+            .welcome-card p {
+                margin: 7px 0 0;
+                color: #c6d8dc;
+                font-size: 14px;
+            }
+
+        .stat-card {
+            background: white;
+            border-radius: 11px;
+            padding: 20px;
+            height: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            background: #e1f0f0;
+            color: #286d6d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            margin-bottom: 14px;
+        }
+
+        .stat-card h6 {
+            margin: 0;
+            color: #718087;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        .stat-card h3 {
+            margin: 5px 0 0;
+            font-size: 27px;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 11px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+
+        .section-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #edf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .section-header h5 {
+                margin: 0;
+                font-size: 16px;
+            }
+
+        .section-body {
+            padding: 20px;
+        }
+
+        .empty-placeholder {
+            text-align: center;
+            padding: 25px 10px;
+            color: #718087;
+        }
+
+            .empty-placeholder i {
+                font-size: 35px;
+                color: #3c8f8f;
+                margin-bottom: 10px;
+            }
+
+        .role-badge {
+            display: inline-block;
+            background: #e1f0f0;
+            color: #286d6d;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .quick-button {
+            display: inline-block;
+            background: #3c8f8f;
+            color: white;
+            padding: 9px 14px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+            .quick-button:hover {
+                background: #286d6d;
+                color: white;
+            }
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .dashboard-content {
+                padding: 20px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <img src="{% static 'images/deep_ink_logo.png' %}"
+                 alt="Deep INK Community Center Logo">
+
+            <h1>Deep INK</h1>
+
+            <p>Staff Portal</p>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="/" class="active">
+                <i class="bi bi-grid-1x2-fill"></i>
+                Dashboard
+            </a>
+
+
+            <div class="nav-section">
+                CRM
+            </div>
+
+
+            <a href="#">
+                <i class="bi bi-people"></i>
+                Beneficiaries
+            </a>
+
+            <a href="#">
+                <i class="bi bi-file-earmark-text"></i>
+                Applications
+            </a>
+
+            <a href="#">
+                <i class="bi bi-heart"></i>
+                Programmes
+            </a>
+
+            <a href="#">
+                <i class="bi bi-person-hearts"></i>
+                Volunteers
+            </a>
+
+            <a href="#">
+                <i class="bi bi-calendar-event"></i>
+                Events
+            </a>
+
+
+            {% if role == 'Administrator' or role == 'Manager' %}
+
+            <a href="#">
+                <i class="bi bi-cash-stack"></i>
+                Donations
+            </a>
+
+            {% endif %}
+
+
+            <a href="#">
+                <i class="bi bi-check2-square"></i>
+                Tasks
+            </a>
+
+            <a href="#">
+                <i class="bi bi-folder2-open"></i>
+                Documents
+            </a>
+
+
+            {% if role == 'Administrator' or role == 'Manager' %}
+
+            <a href="#">
+                <i class="bi bi-bar-chart"></i>
+                Reports
+            </a>
+
+            {% endif %}
+
+
+            {% if role == 'Administrator' %}
+
+            <div class="nav-section">
+                Administration
+            </div>
+
+            <a href="#">
+                <i class="bi bi-window"></i>
+                Website Content
+            </a>
+
+            <a href="{% url 'staff_accounts' %}">
+                <i class="bi bi-person-gear"></i>
+                Staff Accounts
+            </a>
+
+            {% endif %}
+
+        </nav>
+
+
+        <div class="logout-form">
+
+            <form method="post"
+                  action="{% url 'logout' %}">
+
+                {% csrf_token %}
+
+                <button type="submit"
+                        class="logout-button">
+
+                    <i class="bi bi-box-arrow-right me-2"></i>
+                    Logout
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main-content">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <h2>
+                    Dashboard
+                </h2>
+
+                <p>
+                    Deep INK Community Centre Management System
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div class="user-avatar">
+
+                    {% if user.first_name %}
+                    {{ user.first_name|first|upper }}
+                    {% else %}
+                    {{ user.username|first|upper }}
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+
+                    <div class="user-name">
+
+                        {% if user.get_full_name %}
+                        {{ user.get_full_name }}
+                        {% else %}
+                        {{ user.username }}
+                        {% endif %}
+
+                    </div>
+
+                    <div class="user-role">
+                        {{ role }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <main class="dashboard-content">
+
+
+            <div class="welcome-card">
+
+                <h3>
+                    Welcome back{% if user.first_name %}, {{ user.first_name }}{% endif %}!
+                </h3>
+
+                <p>
+                    Here is an overview of the Deep INK Community Centre management system.
+                </p>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <div class="row g-4 mb-4">
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+
+                        <h6>
+                            Beneficiaries
+                        </h6>
+
+                        <h3>
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="bi bi-file-earmark-text-fill"></i>
+                        </div>
+
+                        <h6>
+                            Applications
+                        </h6>
+
+                        <h3>
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="bi bi-heart-fill"></i>
+                        </div>
+
+                        <h6>
+                            Programmes
+                        </h6>
+
+                        <h3>
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="bi bi-calendar-event-fill"></i>
+                        </div>
+
+                        <h6>
+                            Upcoming Events
+                        </h6>
+
+                        <h3>
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- LOWER DASHBOARD -->
+
+            <div class="row g-4">
+
+
+                <div class="col-lg-7">
+
+                    <div class="section-card">
+
+                        <div class="section-header">
+
+                            <h5>
+                                Recent Applications
+                            </h5>
+
+                            <span class="role-badge">
+                                {{ role }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="section-body">
+
+                            <div class="empty-placeholder">
+
+                                <i class="bi bi-file-earmark-text"></i>
+
+                                <div>
+                                    No applications to display yet.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-5">
+
+                    <div class="section-card">
+
+                        <div class="section-header">
+
+                            <h5>
+                                Quick Actions
+                            </h5>
+
+                        </div>
+
+
+                        <div class="section-body">
+
+                            {% if role == 'Administrator' %}
+
+                            <a href="{% url 'create_staff_account' %}"
+                               class="quick-button">
+
+                                <i class="bi bi-person-plus me-1"></i>
+                                Add Staff Member
+
+                            </a>
+
+                            {% endif %}
+
+
+                            <a href="#"
+                               class="quick-button">
+
+                                <i class="bi bi-person-plus me-1"></i>
+                                Add Beneficiary
+
+                            </a>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ACCOUNT INFORMATION -->
+
+            <div class="section-card mt-4">
+
+                <div class="section-header">
+
+                    <h5>
+                        Account Information
+                    </h5>
+
+                </div>
+
+
+                <div class="section-body">
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+
+                            <small class="text-muted">
+                                Name
+                            </small>
+
+                            <div>
+                                <strong>
+                                    {{ user.get_full_name|default:user.username }}
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <small class="text-muted">
+                                Username
+                            </small>
+
+                            <div>
+                                <strong>
+                                    {{ user.username }}
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <small class="text-muted">
+                                Role
+                            </small>
+
+                            <div>
+                                <span class="role-badge">
+                                    {{ role }}
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>
