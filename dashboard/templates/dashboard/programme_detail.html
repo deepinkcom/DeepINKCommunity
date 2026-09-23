@@ -1,0 +1,43 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="section-card">
+            <div class="section-header"><h5>Edit Programme</h5></div>
+            <div class="section-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="quick-button">Save Programme</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="section-card">
+            <div class="section-header">
+                <h5>Enrolled Beneficiaries</h5>
+                <a href="{% url 'enrolment_create' %}?programme={{ programme.pk }}" class="quick-button">Enrol</a>
+            </div>
+            <div class="section-body">
+                {% for e in enrolments %}
+                <p class="mb-1">{{ e.beneficiary.full_name }} — {{ e.enrolled_at|date:"Y-m-d" }}</p>
+                {% empty %}
+                <p class="text-muted">No enrolments yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .section-body input, .section-body select, .section-body textarea {
+        width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 6px;
+    }
+</style>
+{% endblock %}

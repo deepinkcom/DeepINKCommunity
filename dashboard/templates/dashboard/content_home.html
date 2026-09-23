@@ -1,0 +1,33 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="section-card">
+            <div class="section-header"><h5>Site Sections</h5></div>
+            <div class="section-body">
+                {% for section in sections %}
+                <p class="d-flex justify-content-between align-items-center">
+                    {{ section.get_key_display }}
+                    <a href="{% url 'content_section_edit' section.pk %}" class="quick-button">Edit</a>
+                </p>
+                {% empty %}
+                <p class="text-muted">Run seed command to create default sections.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="section-card">
+            <div class="section-header"><h5>Content Management</h5></div>
+            <div class="section-body d-flex flex-column gap-2">
+                <a href="{% url 'news_list' %}" class="quick-button">News ({{ pending_news }} pending)</a>
+                <a href="{% url 'impact_story_list' %}" class="quick-button">Impact Stories ({{ pending_stories }} pending)</a>
+                <a href="{% url 'opportunity_list_admin' %}" class="quick-button">Opportunities</a>
+                <a href="{% url 'event_list' %}" class="quick-button">Events & Activities</a>
+                <a href="{% url 'contact_info_edit' %}" class="quick-button">Contact Information</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

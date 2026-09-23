@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} | Deep INK</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f2f4f5; font-family: Arial, Helvetica, sans-serif; color: #18384a; }
+        .sidebar { position: fixed; top: 0; left: 0; width: 245px; height: 100vh; background: #18384a; color: white; overflow-y: auto; z-index: 1000; }
+        .sidebar-brand { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.12); }
+        .sidebar-brand img { width: 75px; height: auto; margin-bottom: 10px; }
+        .sidebar-brand h1 { font-size: 19px; margin: 0; }
+        .sidebar-brand p { margin: 4px 0 0; font-size: 11px; color: #b9d4d4; text-transform: uppercase; letter-spacing: 1px; }
+        .sidebar-nav { padding: 18px 12px; }
+        .nav-section { margin: 18px 10px 8px; color: #8fb4b4; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 11px 13px; margin-bottom: 3px; border-radius: 7px; color: #e9f0f1; text-decoration: none; font-size: 14px; }
+        .sidebar-nav a:hover, .sidebar-nav a.active { background: #286d6d; color: white; }
+        .sidebar-nav i { width: 19px; font-size: 16px; }
+        .logout-form { margin-top: 20px; padding: 0 12px 20px; }
+        .logout-button { width: 100%; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: white; padding: 10px; border-radius: 7px; font-size: 14px; text-align: left; }
+        .logout-button:hover { background: #8a3b3b; border-color: #8a3b3b; }
+        .main-content { margin-left: 245px; min-height: 100vh; }
+        .topbar { background: white; padding: 20px 30px; border-bottom: 1px solid #e1e5e7; display: flex; justify-content: space-between; align-items: center; }
+        .topbar h2 { margin: 0; font-size: 23px; font-weight: 600; }
+        .topbar p { margin: 4px 0 0; color: #718087; font-size: 13px; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: #e1f0f0; color: #286d6d; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .user-name { font-size: 14px; font-weight: 600; }
+        .user-role { font-size: 11px; color: #718087; }
+        .dashboard-content { padding: 30px; }
+        .section-card { background: white; border-radius: 11px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .section-header { padding: 18px 20px; border-bottom: 1px solid #edf0f1; display: flex; justify-content: space-between; align-items: center; }
+        .section-header h5 { margin: 0; font-size: 16px; }
+        .section-body { padding: 20px; }
+        .quick-button { display: inline-block; background: #3c8f8f; color: white; padding: 9px 14px; border-radius: 7px; text-decoration: none; font-size: 13px; font-weight: 600; border: none; cursor: pointer; }
+        .quick-button:hover { background: #286d6d; color: white; }
+        .role-badge { display: inline-block; background: #e1f0f0; color: #286d6d; padding: 5px 11px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .status-submitted { background: #fff3cd; color: #856404; }
+        .status-closed { background: #d4edda; color: #155724; }
+        .status-overdue { background: #f8d7da; color: #721c24; }
+        @media (max-width: 700px) { .sidebar { position: relative; width: 100%; height: auto; } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <img src="{% static 'images/deep_ink_logo.png' %}" alt="Deep INK Logo">
+            <h1>Deep INK</h1>
+            <p>Staff Portal</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" {% if active_nav == 'dashboard' %}class="active"{% endif %}>
+                <i class="bi bi-grid-1x2-fill"></i> Dashboard
+            </a>
+            <div class="nav-section">CRM</div>
+            <a href="{% url 'beneficiary_list' %}" {% if active_nav == 'beneficiaries' %}class="active"{% endif %}>
+                <i class="bi bi-people"></i> Beneficiaries
+            </a>
+            <a href="{% url 'application_list' %}" {% if active_nav == 'applications' %}class="active"{% endif %}>
+                <i class="bi bi-file-earmark-text"></i> Applications
+            </a>
+            <a href="{% url 'programme_list' %}" {% if active_nav == 'programmes' %}class="active"{% endif %}>
+                <i class="bi bi-heart"></i> Programmes
+            </a>
+            <a href="{% url 'volunteer_list' %}" {% if active_nav == 'volunteers' %}class="active"{% endif %}>
+                <i class="bi bi-person-hearts"></i> Volunteers
+            </a>
+            <a href="{% url 'event_list' %}" {% if active_nav == 'events' %}class="active"{% endif %}>
+                <i class="bi bi-calendar-event"></i> Events
+            </a>
+            <a href="{% url 'referral_list' %}" {% if active_nav == 'referrals' %}class="active"{% endif %}>
+                <i class="bi bi-arrow-left-right"></i> Referrals
+            </a>
+            {% if role == 'Administrator' or role == 'Manager' %}
+            <a href="{% url 'donation_list' %}" {% if active_nav == 'donations' %}class="active"{% endif %}>
+                <i class="bi bi-cash-stack"></i> Donations
+            </a>
+            {% endif %}
+            <a href="{% url 'task_list' %}" {% if active_nav == 'tasks' %}class="active"{% endif %}>
+                <i class="bi bi-check2-square"></i> Tasks
+            </a>
+            <a href="{% url 'document_list' %}" {% if active_nav == 'documents' %}class="active"{% endif %}>
+                <i class="bi bi-folder2-open"></i> Documents
+            </a>
+            {% if role == 'Administrator' or role == 'Manager' %}
+            <a href="{% url 'reports_home' %}" {% if active_nav == 'reports' %}class="active"{% endif %}>
+                <i class="bi bi-bar-chart"></i> Reports
+            </a>
+            {% endif %}
+            {% if role == 'Administrator' %}
+            <div class="nav-section">Administration</div>
+            <a href="{% url 'content_home' %}" {% if active_nav == 'content' %}class="active"{% endif %}>
+                <i class="bi bi-window"></i> Website Content
+            </a>
+            <a href="{% url 'audit_log_list' %}" {% if active_nav == 'audit' %}class="active"{% endif %}>
+                <i class="bi bi-journal-text"></i> Audit Trail
+            </a>
+            <a href="{% url 'staff_accounts' %}">
+                <i class="bi bi-person-gear"></i> Staff Accounts
+            </a>
+            {% endif %}
+        </nav>
+        <div class="logout-form">
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </button>
+            </form>
+        </div>
+    </aside>
+    <div class="main-content">
+        <header class="topbar">
+            <div>
+                <h2>{{ page_title }}</h2>
+                <p>Deep INK Community Centre Management System</p>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    {% if user.first_name %}{{ user.first_name|first|upper }}{% else %}{{ user.username|first|upper }}{% endif %}
+                </div>
+                <div>
+                    <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+                    <div class="user-role">{{ role }}</div>
+                </div>
+            </div>
+        </header>
+        <main class="dashboard-content">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% block portal_content %}{% endblock %}
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

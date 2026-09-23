@@ -1,0 +1,424 @@
+{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page Hero -->
+        <section class="programmes-hero">
+            <div class="container">
+
+                <div class="programmes-hero-content">
+                    <p class="section-label">WHAT WE DO</p>
+
+                    <h1>Our Programmes</h1>
+
+                    <p>
+                        Deep Ink Community Centre provides programmes that
+                        support education, personal development,
+                        entrepreneurship, empowerment and stronger
+                        communities.
+                    </p>
+
+                    <a class="primary-button" href="{% url 'get_involved' %}">
+                        Apply for Support
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Programme Cards -->
+        <section class="all-programmes-section">
+            <div class="container">
+
+                <div class="section-title-centred">
+                    <p class="section-label">OUR SERVICES</p>
+
+                    <h2>Supporting people at every stage</h2>
+
+                    <p>
+                        Our programmes respond to educational, personal,
+                        social and economic needs within the community.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- Education Support -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">01</div>
+
+                            <div class="programme-icon aqua-icon">
+                                <i class="bi bi-mortarboard"></i>
+                            </div>
+
+                            <h3>Education Support</h3>
+
+                            <p>
+                                We help learners and students access
+                                educational information and opportunities.
+                            </p>
+
+                            <ul>
+                                <li>School and tertiary applications</li>
+                                <li>Educational guidance</li>
+                                <li>Learning resources and referrals</li>
+                                <li>Access to development opportunities</li>
+                            </ul>
+
+                            <a href="{% url 'get_involved' %}">
+                                Request support
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Youth Development -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">02</div>
+
+                            <div class="programme-icon pink-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+
+                            <h3>Youth Development</h3>
+
+                            <p>
+                                We help young people build confidence,
+                                leadership abilities and practical skills.
+                            </p>
+
+                            <ul>
+                                <li>Personal development</li>
+                                <li>Leadership development</li>
+                                <li>Skills-building activities</li>
+                                <li>Youth engagement programmes</li>
+                            </ul>
+
+                            <a href="{% url 'get_involved' %}">
+                                Get involved
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Entrepreneurship -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">03</div>
+
+                            <div class="programme-icon aqua-icon">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+
+                            <h3>Entrepreneurship Support</h3>
+
+                            <p>
+                                We encourage entrepreneurship and help
+                                individuals develop sustainable ideas.
+                            </p>
+
+                            <ul>
+                                <li>Business development guidance</li>
+                                <li>Entrepreneurship workshops</li>
+                                <li>Information and resources</li>
+                                <li>Networking opportunities</li>
+                            </ul>
+
+                            <a href="{% url 'get_involved' %}">
+                                Request support
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Women and Youth Empowerment -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">04</div>
+
+                            <div class="programme-icon pink-icon">
+                                <i class="bi bi-person-arms-up"></i>
+                            </div>
+
+                            <h3>Women and Youth Empowerment</h3>
+
+                            <p>
+                                We create opportunities that help women and
+                                young people build confidence and independence.
+                            </p>
+
+                            <ul>
+                                <li>Empowerment workshops</li>
+                                <li>Skills development</li>
+                                <li>Personal growth</li>
+                                <li>Community participation</li>
+                            </ul>
+
+                            <a href="{% url 'get_involved' %}">
+                                Get involved
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Men and GBVF Awareness -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">05</div>
+
+                            <div class="programme-icon aqua-icon">
+                                <i class="bi bi-megaphone"></i>
+                            </div>
+
+                            <h3>Men and GBVF Awareness</h3>
+
+                            <p>
+                                We promote healthy communities through
+                                conversations, education and social awareness.
+                            </p>
+
+                            <ul>
+                                <li>Community awareness activities</li>
+                                <li>Positive engagement with men</li>
+                                <li>GBVF prevention awareness</li>
+                                <li>Information and support referrals</li>
+                            </ul>
+
+                            <a href="{% url 'contact' %}">
+                                Contact our team
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Community Outreach -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">06</div>
+
+                            <div class="programme-icon pink-icon">
+                                <i class="bi bi-heart"></i>
+                            </div>
+
+                            <h3>Community Outreach</h3>
+
+                            <p>
+                                We connect with community members to understand
+                                their needs and provide appropriate support.
+                            </p>
+
+                            <ul>
+                                <li>Community engagement</li>
+                                <li>Support activities</li>
+                                <li>Information sharing</li>
+                                <li>Community development initiatives</li>
+                            </ul>
+
+                            <a href="{% url 'get_involved' %}">
+                                Get involved
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Referrals -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">07</div>
+
+                            <div class="programme-icon aqua-icon">
+                                <i class="bi bi-signpost-split"></i>
+                            </div>
+
+                            <h3>Support Referrals</h3>
+
+                            <p>
+                                When specialised assistance is required, we
+                                help connect community members with suitable
+                                organisations and services.
+                            </p>
+
+                            <ul>
+                                <li>Needs identification</li>
+                                <li>Service information</li>
+                                <li>External organisation referrals</li>
+                                <li>Follow-up support</li>
+                            </ul>
+
+                            <a href="{% url 'get_involved' %}">
+                                Apply for support
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Partnerships -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">08</div>
+
+                            <div class="programme-icon pink-icon">
+                                <i class="bi bi-diagram-3"></i>
+                            </div>
+
+                            <h3>Community Partnerships</h3>
+
+                            <p>
+                                We collaborate with organisations,
+                                professionals and community stakeholders.
+                            </p>
+
+                            <ul>
+                                <li>Organisational partnerships</li>
+                                <li>Community collaboration</li>
+                                <li>Resource sharing</li>
+                                <li>Joint development initiatives</li>
+                            </ul>
+
+                            <a href="{% url 'contact' %}">
+                                Partner with us
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                    <!-- Volunteer Support -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="programme-detail-card">
+
+                            <div class="programme-number">09</div>
+
+                            <div class="programme-icon aqua-icon">
+                                <i class="bi bi-person-heart"></i>
+                            </div>
+
+                            <h3>Volunteer Opportunities</h3>
+
+                            <p>
+                                Community members can contribute their time,
+                                experience and skills to Deep Ink programmes.
+                            </p>
+
+                            <ul>
+                                <li>Programme assistance</li>
+                                <li>Community outreach</li>
+                                <li>Skills sharing</li>
+                                <li>Event support</li>
+                            </ul>
+
+                            <a href="{% url 'get_involved' %}">
+                                Become a volunteer
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </article>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="programme-process-section">
+            <div class="container">
+
+                <div class="section-title-centred">
+                    <p class="section-label">GETTING SUPPORT</p>
+
+                    <h2>How the process works</h2>
+
+                    <p>
+                        Follow these simple steps when requesting assistance
+                        from Deep Ink Community Centre.
+                    </p>
+                </div>
+
+                <div class="process-grid">
+
+                    <div class="process-item">
+                        <div class="process-step">1</div>
+
+                        <h3>Submit your request</h3>
+
+                        <p>
+                            Complete the support application with your contact
+                            details and the assistance you require.
+                        </p>
+                    </div>
+
+                    <div class="process-item">
+                        <div class="process-step">2</div>
+
+                        <h3>Application review</h3>
+
+                        <p>
+                            A Deep Ink staff member reviews the submitted
+                            information and identifies the appropriate support.
+                        </p>
+                    </div>
+
+                    <div class="process-item">
+                        <div class="process-step">3</div>
+
+                        <h3>Receive feedback</h3>
+
+                        <p>
+                            The organisation contacts the applicant regarding
+                            the next steps, available support or a referral.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="get-involved-section">
+            <div class="container">
+
+                <div class="get-involved-banner">
+
+                    <div class="banner-icon">
+                        <i class="bi bi-heart-fill"></i>
+                    </div>
+
+                    <div class="banner-content">
+                        <h2>Do you need support?</h2>
+
+                        <p>
+                            Tell us about the assistance you need and our team
+                            will review your application.
+                        </p>
+                    </div>
+
+                    <a class="banner-button" href="{% url 'get_involved' %}">
+                        Apply for Support
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+        </section>
+
+{% endblock %}

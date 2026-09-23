@@ -1,0 +1,45 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="section-card">
+    <div class="section-header">
+        <h5>{{ page_title }}</h5>
+        {% if content_type == 'news' %}
+        <a href="{% url 'news_create' %}" class="quick-button">Add Article</a>
+        {% elif content_type == 'impact' %}
+        <a href="{% url 'impact_story_create' %}" class="quick-button">Add Story</a>
+        {% elif content_type == 'opportunity' %}
+        <a href="{% url 'opportunity_create' %}" class="quick-button">Add Opportunity</a>
+        {% endif %}
+    </div>
+    <div class="section-body">
+        {% if items %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead><tr><th>Title</th><th>Status</th><th>Published</th><th></th></tr></thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.get_status_display }}</td>
+                        <td>{{ item.published_at|date:"Y-m-d"|default:"—" }}</td>
+                        <td>
+                            {% if item.status != 'published' %}
+                            {% if content_type == 'news' %}
+                            <a href="{% url 'news_approve' item.pk %}" class="quick-button">Publish</a>
+                            {% elif content_type == 'impact' %}
+                            <a href="{% url 'impact_story_approve' item.pk %}" class="quick-button">Publish</a>
+                            {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No content yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

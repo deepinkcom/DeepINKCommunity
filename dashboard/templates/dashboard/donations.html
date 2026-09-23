@@ -1,0 +1,44 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="d-flex gap-2 mb-4">
+    <a href="{% url 'donated_item_create' %}" class="quick-button">Record Donated Item</a>
+    <a href="{% url 'funding_create' %}" class="quick-button">Record Funding</a>
+    <a href="{% url 'distribution_create' %}" class="quick-button">Record Distribution</a>
+</div>
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="section-card">
+            <div class="section-header"><h5>Donated Items</h5></div>
+            <div class="section-body">
+                {% for item in donated_items %}
+                <p class="mb-2"><strong>{{ item.description }}</strong><br>
+                <small>{{ item.get_item_type_display }} × {{ item.quantity }} — {{ item.received_date }}</small></p>
+                {% empty %}<p class="text-muted">No items recorded.</p>{% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="section-card">
+            <div class="section-header"><h5>Funding</h5></div>
+            <div class="section-body">
+                {% for f in funding_records %}
+                <p class="mb-2"><strong>{{ f.source }}</strong><br>
+                <small>{{ f.amount }} {{ f.currency }} — {{ f.received_date }}</small></p>
+                {% empty %}<p class="text-muted">No funding recorded.</p>{% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="section-card">
+            <div class="section-header"><h5>Distributions</h5></div>
+            <div class="section-body">
+                {% for d in distributions %}
+                <p class="mb-2"><strong>{{ d.description }}</strong><br>
+                <small>{{ d.get_distribution_type_display }} × {{ d.quantity }} — {{ d.distribution_date }}</small></p>
+                {% empty %}<p class="text-muted">No distributions recorded.</p>{% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

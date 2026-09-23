@@ -1,0 +1,29 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="row g-4 mb-4">
+    {% for label, value in stats.items %}
+    <div class="col-md-3">
+        <div class="section-card">
+            <div class="section-body text-center">
+                <h3>{{ value }}</h3>
+                <small class="text-muted text-uppercase">{{ label }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="section-card">
+    <div class="section-header"><h5>Export Reports (CSV)</h5></div>
+    <div class="section-body d-flex flex-wrap gap-2">
+        <a href="{% url 'report_export' 'beneficiaries' %}" class="quick-button">Beneficiaries</a>
+        <a href="{% url 'report_export' 'programmes' %}" class="quick-button">Programmes</a>
+        <a href="{% url 'report_export' 'referrals' %}" class="quick-button">Referrals</a>
+        <a href="{% url 'report_export' 'attendance' %}" class="quick-button">Attendance</a>
+        <a href="{% url 'report_export' 'partnerships' %}" class="quick-button">Partnerships</a>
+        <a href="{% url 'report_export' 'outreach' %}" class="quick-button">Outreach</a>
+        <a href="{% url 'report_export' 'impact' %}" class="quick-button">Impact Stories</a>
+        <a href="{% url 'report_export' 'applications' %}" class="quick-button">Applications</a>
+    </div>
+</div>
+{% endblock %}

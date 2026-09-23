@@ -1,0 +1,29 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="section-card">
+    <div class="section-header"><h5>Audit Trail</h5></div>
+    <div class="section-body">
+        {% if logs %}
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+                <thead><tr><th>Timestamp</th><th>User</th><th>Action</th><th>Object</th><th>Changes</th></tr></thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.timestamp|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ log.user.get_full_name|default:log.user.username|default:"System" }}</td>
+                        <td>{{ log.get_action_display }}</td>
+                        <td>{{ log.model_name }} #{{ log.object_id }} — {{ log.object_repr }}</td>
+                        <td><small>{{ log.changes }}</small></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No audit entries yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

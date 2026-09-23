@@ -1,0 +1,33 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="section-card">
+    <div class="section-header">
+        <h5>Staff Tasks {% if overdue_count %}<span class="status-badge status-overdue">{{ overdue_count }} overdue</span>{% endif %}</h5>
+        <a href="{% url 'task_create' %}" class="quick-button">Assign Task</a>
+    </div>
+    <div class="section-body">
+        {% if tasks %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr><th>Title</th><th>Assigned To</th><th>Due Date</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr {% if task.is_overdue %}class="table-danger"{% endif %}>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.assigned_to.get_full_name|default:task.assigned_to.username }}</td>
+                        <td>{{ task.due_date|default:"—" }}</td>
+                        <td>{{ task.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No tasks assigned.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

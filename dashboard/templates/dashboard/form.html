@@ -1,0 +1,43 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="section-card">
+    <div class="section-header">
+        <h5>{{ page_title }}</h5>
+    </div>
+    <div class="section-body">
+        <form method="post" {% if multipart %}enctype="multipart/form-data"{% endif %}>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-danger small">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="d-flex gap-2">
+                <button type="submit" class="quick-button">Save</button>
+                <a href="{% url cancel_url_name %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+<style>
+    .section-body input[type="text"],
+    .section-body input[type="email"],
+    .section-body input[type="tel"],
+    .section-body input[type="number"],
+    .section-body input[type="date"],
+    .section-body input[type="datetime-local"],
+    .section-body input[type="url"],
+    .section-body select,
+    .section-body textarea {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+    }
+</style>
+{% endblock %}

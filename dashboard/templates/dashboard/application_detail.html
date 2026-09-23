@@ -1,0 +1,62 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="section-card">
+            <div class="section-header">
+                <h5>{{ application.reference_number }} — {{ application.get_request_type_display }}</h5>
+                <span class="status-badge status-{{ application.status }}">{{ application.get_status_display }}</span>
+            </div>
+            <div class="section-body">
+                <p><strong>Applicant:</strong> {{ application.first_name }} {{ application.last_name }}</p>
+                <p><strong>Email:</strong> {{ application.email }} | <strong>Phone:</strong> {{ application.phone|default:"—" }}</p>
+                <p><strong>Message:</strong></p>
+                <p>{{ application.message }}</p>
+                <hr>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="quick-button">Update Application</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="section-card">
+            <div class="section-header"><h5>Follow-ups</h5></div>
+            <div class="section-body">
+                <a href="{% url 'follow_up_create' %}?request={{ application.pk }}" class="quick-button mb-3">Record Follow-up</a>
+                {% for fu in follow_ups %}
+                <div class="mb-2 pb-2 border-bottom">
+                    <small class="text-muted">{{ fu.follow_up_date|date:"Y-m-d H:i" }}</small>
+                    <p class="mb-0 small">{{ fu.notes }}</p>
+                </div>
+                {% empty %}
+                <p class="text-muted small">No follow-ups recorded.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="section-card">
+            <div class="section-header"><h5>Documents</h5></div>
+            <div class="section-body">
+                {% for doc in documents %}
+                <p class="mb-1"><a href="{{ doc.file.url }}">{{ doc.title }}</a></p>
+                {% empty %}
+                <p class="text-muted small">No documents attached.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .section-body input, .section-body select, .section-body textarea {
+        width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 6px;
+    }
+</style>
+{% endblock %}

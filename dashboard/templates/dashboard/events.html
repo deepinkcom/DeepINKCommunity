@@ -1,0 +1,34 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<div class="section-card">
+    <div class="section-header">
+        <h5>Events, Dialogues, Campaigns & Outreach</h5>
+        <a href="{% url 'event_create' %}" class="quick-button">Create Event</a>
+    </div>
+    <div class="section-body">
+        {% if events %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr><th>Title</th><th>Type</th><th>Start</th><th>Location</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>{{ event.title }}</td>
+                        <td>{{ event.get_event_type_display }}</td>
+                        <td>{{ event.start_date|date:"Y-m-d H:i" }}</td>
+                        <td>{{ event.location|default:"—" }}</td>
+                        <td>{{ event.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No events scheduled.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

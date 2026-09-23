@@ -1,0 +1,376 @@
+{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- About Hero -->
+        <section class="page-hero about-hero">
+            <div class="container">
+                <div class="row align-items-center g-5">
+
+                    <div class="col-lg-5">
+                        <p class="section-label">WHO WE ARE</p>
+
+                        <h1>About Deep Ink</h1>
+
+                        <p class="page-hero-description">
+                            We empower young people, families and communities
+                            through education, skills development, awareness,
+                            support and meaningful partnerships.
+                        </p>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <img class="page-hero-image" src="{% static 'app/images/hero-home.png' %}"
+                            alt="Deep Ink community development programme">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Introduction -->
+        <section class="about-introduction">
+            <div class="container">
+
+                <div class="row align-items-center g-5">
+
+                    <div class="col-lg-5">
+                        <p class="section-label">OUR STORY</p>
+
+                        <h2>Building stronger communities together</h2>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <p>
+                            {% if sections.background %}{{ sections.background.content }}{% else %}Deep Ink Community Centre is a community-focused
+                            organisation committed to creating opportunities
+                            for young people, families and community members.{% endif %}
+                        </p>
+
+                        <p>
+                            The organisation supports people through
+                            educational assistance, youth development,
+                            entrepreneurship, empowerment programmes,
+                            community outreach, referrals and partnerships.
+                        </p>
+
+                        <p>
+                            Deep Ink works to create a supportive environment
+                            where individuals can develop their abilities,
+                            access opportunities and contribute positively to
+                            their communities.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Mission, Vision and Story -->
+        <section class="purpose-section">
+            <div class="container">
+
+                <div class="section-title-centred">
+                    <p class="section-label">OUR PURPOSE</p>
+
+                    <h2>What guides our work</h2>
+
+                    <p>
+                        Our mission, vision and purpose guide every programme,
+                        partnership and community activity.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- Our Story -->
+                    <div class="col-md-4">
+                        <article class="purpose-card">
+
+                            <div class="purpose-icon aqua-icon">
+                                <i class="bi bi-book"></i>
+                            </div>
+
+                            <h3>Our Story</h3>
+
+                            <p>
+                                Deep Ink was established to help community
+                                members access information, practical support,
+                                development opportunities and resources that
+                                can improve their lives.
+                            </p>
+
+                        </article>
+                    </div>
+
+                    <!-- Our Mission -->
+                    <div class="col-md-4">
+                        <article class="purpose-card purpose-card-pink">
+
+                            <div class="purpose-icon pink-icon">
+                                <i class="bi bi-bullseye"></i>
+                            </div>
+
+                            <h3>Our Mission</h3>
+
+                            <p>
+                                To empower young people, families and
+                                communities through education, skills
+                                development, support, awareness and
+                                collaboration.
+                            </p>
+
+                        </article>
+                    </div>
+
+                    <!-- Our Vision -->
+                    <div class="col-md-4">
+                        <article class="purpose-card">
+
+                            <div class="purpose-icon aqua-icon">
+                                <i class="bi bi-eye"></i>
+                            </div>
+
+                            <h3>Our Vision</h3>
+
+                            <p>
+                                A strong and inclusive community where people
+                                have the confidence, knowledge and
+                                opportunities needed to build brighter
+                                futures.
+                            </p>
+
+                        </article>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Focus Areas -->
+        <section class="focus-section">
+            <div class="container">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="section-label">OUR FOCUS</p>
+
+                        <h2>How we serve the community</h2>
+                    </div>
+
+                    <a class="text-link" href="{% url 'programmes' %}">
+                        Explore our programmes
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- Education -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="focus-card">
+
+                            <div class="focus-icon aqua-icon">
+                                <i class="bi bi-mortarboard"></i>
+                            </div>
+
+                            <div>
+                                <h3>Education</h3>
+
+                                <p>
+                                    Supporting learners and students with
+                                    access to information, applications and
+                                    educational opportunities.
+                                </p>
+                            </div>
+
+                        </article>
+                    </div>
+
+                    <!-- Empowerment -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="focus-card">
+
+                            <div class="focus-icon pink-icon">
+                                <i class="bi bi-person-arms-up"></i>
+                            </div>
+
+                            <div>
+                                <h3>Empowerment</h3>
+
+                                <p>
+                                    Helping people build confidence, discover
+                                    their potential and develop useful life
+                                    skills.
+                                </p>
+                            </div>
+
+                        </article>
+                    </div>
+
+                    <!-- Community -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="focus-card">
+
+                            <div class="focus-icon aqua-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+
+                            <div>
+                                <h3>Community</h3>
+
+                                <p>
+                                    Creating welcoming spaces where
+                                    connections, collaboration and community
+                                    support can grow.
+                                </p>
+                            </div>
+
+                        </article>
+                    </div>
+
+                    <!-- Entrepreneurship -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="focus-card">
+
+                            <div class="focus-icon pink-icon">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+
+                            <div>
+                                <h3>Entrepreneurship</h3>
+
+                                <p>
+                                    Supporting aspiring entrepreneurs with
+                                    knowledge, guidance and development
+                                    opportunities.
+                                </p>
+                            </div>
+
+                        </article>
+                    </div>
+
+                    <!-- Awareness -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="focus-card">
+
+                            <div class="focus-icon aqua-icon">
+                                <i class="bi bi-megaphone"></i>
+                            </div>
+
+                            <div>
+                                <h3>Awareness</h3>
+
+                                <p>
+                                    Promoting awareness about social issues,
+                                    including the prevention of gender-based
+                                    violence.
+                                </p>
+                            </div>
+
+                        </article>
+                    </div>
+
+                    <!-- Partnerships -->
+                    <div class="col-md-6 col-lg-4">
+                        <article class="focus-card">
+
+                            <div class="focus-icon pink-icon">
+                                <i class="bi bi-diagram-3"></i>
+                            </div>
+
+                            <div>
+                                <h3>Partnerships</h3>
+
+                                <p>
+                                    Working with organisations and community
+                                    stakeholders to extend support and create
+                                    opportunities.
+                                </p>
+                            </div>
+
+                        </article>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Values -->
+        <section class="values-section">
+            <div class="container">
+
+                <div class="section-title-centred">
+                    <p class="section-label">OUR VALUES</p>
+
+                    <h2>The values behind our work</h2>
+
+                    <p>
+                        These principles influence how we serve individuals,
+                        families and communities.
+                    </p>
+                </div>
+
+                <div class="values-container">
+
+                    <div class="value-item">
+                        <i class="bi bi-heart"></i>
+                        <h3>Compassion</h3>
+                    </div>
+
+                    <div class="value-item">
+                        <i class="bi bi-people"></i>
+                        <h3>Inclusivity</h3>
+                    </div>
+
+                    <div class="value-item">
+                        <i class="bi bi-shield-check"></i>
+                        <h3>Integrity</h3>
+                    </div>
+
+                    <div class="value-item">
+                        <i class="bi bi-lightbulb"></i>
+                        <h3>Empowerment</h3>
+                    </div>
+
+                    <div class="value-item">
+                        <i class="bi bi-diagram-3"></i>
+                        <h3>Collaboration</h3>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Get Involved Banner -->
+        <section class="get-involved-section">
+            <div class="container">
+
+                <div class="get-involved-banner">
+
+                    <div class="banner-icon">
+                        <i class="bi bi-heart-fill"></i>
+                    </div>
+
+                    <div class="banner-content">
+                        <h2>Become part of our community.</h2>
+
+                        <p>
+                            Apply for support, volunteer your skills or partner
+                            with Deep Ink Community Centre.
+                        </p>
+                    </div>
+
+                    <a class="banner-button" href="{% url 'get_involved' %}">
+                        Get Involved
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+        </section>
+
+{% endblock %}

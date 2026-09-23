@@ -1,0 +1,54 @@
+{% extends "dashboard/base_portal.html" %}
+{% load dashboard_extras %}
+
+{% block portal_content %}
+<div class="section-card">
+    <div class="section-header">
+        <h5>{{ page_title }}</h5>
+        {% if create_url_name %}
+        <a href="{% url create_url_name %}" class="quick-button">
+            <i class="bi bi-plus-lg me-1"></i> Add New
+        </a>
+        {% endif %}
+    </div>
+    <div class="section-body">
+        {% if items %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        {% for col in columns %}
+                        <th>{{ col|title }}</th>
+                        {% endfor %}
+                        {% if detail_url_name %}<th></th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        {% for col in columns %}
+                        <td>
+                            {% if col == 'full_name' %}{{ item.full_name }}
+                            {% elif col == 'is_active' %}{% if item.is_active %}Yes{% else %}No{% endif %}
+                            {% elif col == 'uploaded_at' %}{{ item.uploaded_at|date:"Y-m-d H:i" }}
+                            {% elif col == 'referral_date' %}{{ item.referral_date|date:"Y-m-d" }}
+                            {% elif col == 'start_date' %}{{ item.start_date|date:"Y-m-d"|default:"—" }}
+                            {% else %}{{ item|get_attr:col }}{% endif %}
+                        </td>
+                        {% endfor %}
+                        {% if detail_url_name %}
+                        <td>
+                            <a href="{% url detail_url_name item.pk %}" class="quick-button">Edit</a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No records found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
