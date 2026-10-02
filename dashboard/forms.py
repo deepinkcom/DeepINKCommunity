@@ -38,6 +38,13 @@ class BeneficiaryForm(forms.ModelForm):
             'phone', 'email', 'address', 'category', 'support_needs', 'notes',
         ]
 
+        widgets = {
+            'date_of_birth': forms.DateInput(
+                attrs={'type': 'date'},
+                format='%Y-%m-%d',
+            ),
+        }
+
 
 class ServiceRequestForm(forms.ModelForm):
     class Meta:
@@ -60,6 +67,17 @@ class ProgrammeForm(forms.ModelForm):
             'name', 'programme_type', 'description',
             'start_date', 'end_date', 'location', 'coordinator', 'is_active',
         ]
+
+        widgets = {
+            'start_date': forms.DateInput(
+                attrs={'type': 'date'},
+                format='%Y-%m-%d',
+            ),
+            'end_date': forms.DateInput(
+                attrs={'type': 'date'},
+                format='%Y-%m-%d',
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -213,8 +231,7 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = [
             'title', 'summary', 'body', 'event_type', 'start_date',
-            'end_date', 'location', 'registration_link',
-            'is_registration_required', 'status', 'published_at',
+            'end_date', 'location',  'status', 'published_at',
         ]
         widgets = {
             'start_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
