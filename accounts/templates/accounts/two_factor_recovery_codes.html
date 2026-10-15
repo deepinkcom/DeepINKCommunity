@@ -1,0 +1,109 @@
+{% extends 'accounts/two_factor_base.html' %}
+
+{% block title %}
+Recovery Codes
+{% endblock %}
+
+{% block heading %}
+Save Your Recovery Codes
+{% endblock %}
+
+{% block subtitle %}
+Store these codes somewhere safe. Each code can only be used once.
+{% endblock %}
+
+{% block content %}
+
+<div style="
+    margin: 22px 0;
+    padding: 18px;
+    background: #f7fafa;
+    border: 1px solid #d8e8e8;
+    border-radius: 10px;
+">
+
+    <p style="
+        margin: 0 0 15px;
+        color: #555555;
+        text-align: center;
+        line-height: 1.5;
+    ">
+        If you lose access to your authenticator app, use one of these
+        codes instead of the six-digit authentication code.
+    </p>
+
+    <div style="
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    ">
+
+        {% for code in recovery_codes %}
+
+            <code style="
+                display: block;
+                padding: 10px;
+                background: #ffffff;
+                border: 1px solid #dddddd;
+                border-radius: 6px;
+                color: #222222;
+                font-size: 15px;
+                text-align: center;
+                letter-spacing: 1px;
+            ">
+                {{ code }}
+            </code>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<div style="
+    margin-bottom: 20px;
+    padding: 12px;
+    background: #fff7e6;
+    border-left: 4px solid #e6a700;
+    color: #6d5200;
+    font-size: 14px;
+    line-height: 1.5;
+">
+    These codes will not be displayed again. Do not share them with
+    anyone or include them in screenshots.
+</div>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <label style="
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 18px;
+        color: #444444;
+        font-size: 14px;
+        line-height: 1.4;
+    ">
+
+        <input type="checkbox"
+               required
+               style="margin-top: 3px;">
+
+        <span>
+            I have saved my recovery codes in a secure location.
+        </span>
+
+    </label>
+
+    <button type="submit"
+            class="sign-in-button">
+
+        Continue to Dashboard
+
+    </button>
+
+</form>
+
+{% endblock %}

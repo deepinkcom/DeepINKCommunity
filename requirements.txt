@@ -4,3 +4,5 @@ dj-database-url==3.1.2
 psycopg[binary]==3.3.6
 gunicorn==26.2.0
 whitenoise==6.12.0
+django-otp==1.7.4
+qrcode==8.2

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
 from .forms import StaffCreationForm, StaffEditForm
 from .models import StaffProfile
@@ -12,19 +13,29 @@ class StaffLoginView(LoginView):
     template_name = 'accounts/login.html'
 
     def form_valid(self, form):
+        """
+        Store a short-lived pending login after the password is valid.
 
-        remember_me = self.request.POST.get('remember_me')
+        The user is only fully logged in after completing the
+        authenticator-code step.
+        """
 
-        if remember_me:
-            # Keep the session active for 14 days
-            self.request.session.set_expiry(
-                60 * 60 * 24 * 14
-            )
-        else:
-            # Session expires when the browser is closed
-            self.request.session.set_expiry(0)
+        user = form.get_user()
+        remember_me = bool(
+            self.request.POST.get('remember_me')
+        )
 
-        return super().form_valid(form)
+        # Change the session key after successful password validation.
+        self.request.session.cycle_key()
+
+        self.request.session['pre_2fa_user_id'] = user.id
+        self.request.session['pre_2fa_started_at'] = (
+            timezone.now().timestamp()
+        )
+        self.request.session['pre_2fa_remember_me'] = remember_me
+        self.request.session['pre_2fa_next'] = self.get_success_url()
+
+        return redirect('two_factor_verify')
 
 
 def is_administrator(user):

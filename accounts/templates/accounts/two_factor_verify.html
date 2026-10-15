@@ -1,0 +1,88 @@
+{% extends 'accounts/two_factor_base.html' %}
+
+{% block title %}
+Two-Factor Verification
+{% endblock %}
+
+{% block heading %}
+Verification Required
+{% endblock %}
+
+{% block subtitle %}
+Enter a code from your authenticator app or use a recovery code.
+{% endblock %}
+
+{% block content %}
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <label for="id_token"
+           class="otp-label">
+
+        Authentication or recovery code
+
+    </label>
+
+    <input type="text"
+           name="token"
+           id="id_token"
+           class="otp-input"
+           minlength="6"
+           maxlength="16"
+           autocomplete="one-time-code"
+           autocapitalize="none"
+           spellcheck="false"
+           aria-describedby="token-help"
+           required
+           autofocus>
+
+    <small id="token-help"
+           style="
+               display: block;
+               margin-top: 10px;
+               color: #777777;
+               text-align: center;
+               line-height: 1.5;
+           ">
+
+        Authenticator codes refresh approximately every 30 seconds.
+        You may also enter one of your single-use recovery codes.
+
+    </small>
+
+    {% if recovery_codes_remaining == 0 %}
+
+        <div style="
+            margin-top: 16px;
+            padding: 10px;
+            background: #fff7e6;
+            border-left: 4px solid #e6a700;
+            color: #6d5200;
+            font-size: 13px;
+            line-height: 1.4;
+        ">
+            No recovery codes remain on this account.
+        </div>
+
+    {% endif %}
+
+    <button type="submit"
+            class="sign-in-button">
+
+        Verify and Sign In
+
+    </button>
+
+</form>
+
+<a href="{% url 'login' %}"
+   class="back-link">
+
+    <i class="bi bi-arrow-left"></i>
+    Return to login
+
+</a>
+
+{% endblock %}
