@@ -1,41 +1,59 @@
 """
-Django settings for DeepINKCommunity project.
-
-Based on 'django-admin startproject' using Django 2.1.2.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/2.1/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/2.1/ref/settings/
+Django settings for the DeepINKCommunity project.
 """
 
 import os
-
 from pathlib import Path
-import posixpath
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import dj_database_url
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-only-change-this-secret-key')
+# --------------------------------------------------
+# Base directory
+# --------------------------------------------------
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = []
 
-# Application references
-# https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
+# --------------------------------------------------
+# Security and environment
+# --------------------------------------------------
+
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'dev-only-change-this-secret-key',
+)
+
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() == 'true'
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        'DJANGO_ALLOWED_HOSTS',
+        '127.0.0.1,localhost',
+    ).split(',')
+    if host.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        'DJANGO_CSRF_TRUSTED_ORIGINS',
+        '',
+    ).split(',')
+    if origin.strip()
+]
+
+
+# --------------------------------------------------
+# Applications
+# --------------------------------------------------
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INSTALLED_APPS = [
     'app',
-    # Add your apps here to enable them
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,8 +65,11 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
 ]
 
-# Middleware framework
-# https://docs.djangoproject.com/en/2.1/topics/http/middleware/
+
+# --------------------------------------------------
+# Middleware
+# --------------------------------------------------
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -59,10 +80,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+# --------------------------------------------------
+# URL and application configuration
+# --------------------------------------------------
+
 ROOT_URLCONF = 'DeepINKCommunity.urls'
 
-# Template configuration
-# https://docs.djangoproject.com/en/2.1/topics/templates/
+WSGI_APPLICATION = 'DeepINKCommunity.wsgi.application'
+
+
+# --------------------------------------------------
+# Templates
+# --------------------------------------------------
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -79,63 +110,110 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'DeepINKCommunity.wsgi.application'
+
+# --------------------------------------------------
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+# --------------------------------------------------
+
+# Local development:
+# Uses SQLite when DATABASE_URL is not available.
+#
+# Azure production:
+# Uses PostgreSQL when DATABASE_URL is configured
+# in the Azure App Service environment variables.
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
+
+# --------------------------------------------------
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+# --------------------------------------------------
+
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator'
+        ),
         'OPTIONS': {
             'min_length': 12,
         },
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator'
+        ),
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
+
+# --------------------------------------------------
+# Internationalisation
+# --------------------------------------------------
+
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+
+TIME_ZONE = 'Africa/Johannesburg'
+
 USE_I18N = True
-USE_L10N = True
+
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+
+# --------------------------------------------------
+# Static files
+# --------------------------------------------------
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login'
 
 # --------------------------------------------------
-# Security Settings
+# Uploaded media
+# --------------------------------------------------
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# --------------------------------------------------
+# Authentication redirects
+# --------------------------------------------------
+
+LOGIN_URL = 'login'
+
+LOGIN_REDIRECT_URL = 'dashboard'
+
+LOGOUT_REDIRECT_URL = 'login'
+
+
+# --------------------------------------------------
+# Cookie and browser security
 # --------------------------------------------------
 
 SESSION_COOKIE_HTTPONLY = True
@@ -148,5 +226,28 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# Development email configuration
+
+# Enable these automatically when DEBUG is disabled
+SESSION_COOKIE_SECURE = not DEBUG
+
+CSRF_COOKIE_SECURE = not DEBUG
+
+SECURE_SSL_REDIRECT = (
+    os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False').lower()
+    == 'true'
+)
+
+
+# Azure forwards information about the original HTTPS request
+SECURE_PROXY_SSL_HEADER = (
+    'HTTP_X_FORWARDED_PROTO',
+    'https',
+)
+
+
+# --------------------------------------------------
+# Email
+# --------------------------------------------------
+
+# During development, emails appear in the command window.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
