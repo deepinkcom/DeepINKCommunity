@@ -1,592 +1,338 @@
-\# Deep INK Community Centre Management System
+# Deep INK Community Centre Management System
+
+## Project Overview
+
+The Deep INK Community Centre Management System is a Django-based web application developed as part of a Work-Integrated Learning project.
+
+The system consists of:
+
+- A public community-centre website
+- Volunteer and service-request forms
+- A secure staff portal
+- Role-based access control
+- Two-factor authentication
+- A central CRM dashboard
+- Community programme and beneficiary management
+- Microsoft Azure deployment
+- Azure Database for PostgreSQL integration
+
+## Live Deployment
+
+The application is deployed using Microsoft Azure App Service:
+
+https://deepinkcommunity-app-fkhhbrhngyd4b3cq.uaenorth-01.azurewebsites.net/
+
+## Main Features
+
+### Public Website
+
+- Home page
+- About page
+- Programmes page
+- Get Involved page
+- Contact page
+- Volunteer application submission
+- Public service-request submission
+- Responsive navigation and page layouts
+
+### Staff Authentication and Security
+
+- Secure username and password authentication
+- Time-based one-time password two-factor authentication
+- QR-code authenticator enrolment
+- Single-use recovery codes
+- Role-based authorisation
+- Protected dashboard and administration pages
+- Session expiry controls
+- CSRF protection
+- Environment-based secret management
+
+### CRM and Administration
+
+- Beneficiary management
+- Service-request management
+- Programme management
+- Programme enrolments
+- Attendance tracking
+- Referrals
+- Volunteer records
+- Partner records
+- Donor records
+- Emerging entrepreneur records
+- Donations and funding records
+- Outreach distribution records
+- Document management
+- Staff tasks
+- Follow-up records
+- Audit logs
+- Staff account management
+
+## User Roles
+
+The system supports the following roles:
+
+- **Administrator** – manages staff accounts, permissions and system information
+- **Manager** – manages operational information and staff activities
+- **Staff** – accesses authorised CRM and community-management functions
+
+## Technology Stack
+
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+- Bootstrap
+- Bootstrap Icons
+
+### Backend
+
+- Python 3.12
+- Django
+- Django authentication
+- Django groups and permissions
+- django-otp
+- QRCode
+
+### Database
+
+- SQLite for local development
+- Azure Database for PostgreSQL in production
+- psycopg PostgreSQL driver
+- dj-database-url
 
+### Deployment
 
+- Microsoft Azure App Service
+- Azure Database for PostgreSQL
+- GitHub Actions
+- Gunicorn
+- WhiteNoise
 
-\## Project Overview
+### Development Tools
 
+- Visual Studio Code
+- Git
+- GitHub
 
-
-The Deep INK Community Centre Management System is a web-based platform being developed as part of a Work-Integrated Learning (WIL) project.
-
-
-
-The system is designed to support the digital management of the Deep INK Community Centre by providing secure staff access, role-based permissions, a central dashboard, and functionality that can be integrated with the organisation's future community and CRM requirements.
-
-
-
-The project uses a modular architecture so that different development team members can work on separate functional areas while maintaining a common Django application.
-
-
-
-\---
-
-
-
-\## Project Objectives
-
-
-
-The main objectives of the system are to:
-
-
-
-\- Provide secure staff authentication.
-
-\- Manage staff accounts and staff information.
-
-\- Implement role-based access control.
-
-\- Provide different levels of permissions for administrators, managers and staff.
-
-\- Provide a central dashboard for authorised users.
-
-\- Support future CRM functionality.
-
-\- Improve the organisation's ability to manage community information and activities.
-
-\- Provide a maintainable and scalable foundation for future deployment.
-
-
-
-\---
-
-
-
-\## Technology Stack
-
-
-
-\### Frontend
-
-
-
-\- HTML5
-
-\- CSS3
-
-\- Bootstrap
-
-\- JavaScript
-
-\- Bootstrap Icons
-
-
-
-\### Backend
-
-
-
-\- Python
-
-\- Django
-
-\- Django Authentication
-
-\- Django Groups and Permissions
-
-
-
-\### Database
-
-
-
-\- SQLite for local development
-
-\- Azure SQL Database or PostgreSQL planned for production
-
-
-
-\### Development Tools
-
-
-
-\- Visual Studio
-
-\- Git
-
-\- GitHub
-
-
-
-\### Deployment
-
-
-
-\- Microsoft Azure is planned for production hosting.
-
-
-
-\---
-
-
-
-\## Project Structure
-
-
+## Project Structure
 
 ```text
-
 DeepINKCommunity/
-
-│
-
 ├── DeepINKCommunity/
-
 │   ├── settings.py
-
 │   ├── urls.py
-
 │   ├── wsgi.py
-
-│   └── \_\_init\_\_.py
-
-│
-
+│   └── __init__.py
 ├── accounts/
-
 │   ├── management/
-
-│   │   └── commands/
-
 │   ├── migrations/
-
-│   ├── templates/
-
-│   │   └── accounts/
-
-│   ├── admin.py
-
+│   ├── templates/accounts/
 │   ├── forms.py
-
 │   ├── models.py
-
-│   ├── tests.py
-
+│   ├── two_factor_views.py
 │   ├── urls.py
-
 │   └── views.py
-
-│
-
-├── dashboard/
-
-│   ├── migrations/
-
-│   ├── templates/
-
-│   │   └── dashboard/
-
-│   ├── admin.py
-
-│   ├── models.py
-
-│   ├── tests.py
-
-│   ├── urls.py
-
-│   └── views.py
-
-│
-
 ├── app/
-
 │   ├── migrations/
-
-│   ├── templates/
-
 │   ├── static/
-
+│   ├── templates/app/
 │   ├── forms.py
-
 │   ├── models.py
-
-│   ├── tests.py
-
+│   ├── urls.py
 │   └── views.py
-
-│
-
-├── static/
-
-│   └── images/
-
-│       └── deep\_ink\_logo.png
-
-│
-
+├── dashboard/
+│   ├── migrations/
+│   ├── templates/dashboard/
+│   ├── admin.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
 ├── manage.py
-
 ├── requirements.txt
-
 ├── .gitignore
-
 └── README.md
+```
 
+## Local Development Setup
 
-
-\# Deep INK Community Centre
-
-
-
-\## Local Development Setup
-
-
-
-Follow the steps below to set up the Deep INK Community Centre project on a local development machine.
-
-
-
-\### 1. Clone the Repository
-
-
-
-Clone the GitHub repository:
-
-
+### 1. Clone the Repository
 
 ```bash
-
 git clone https://github.com/deepinkcom/DeepINKCommunity.git
-
-```
-
-
-
-Navigate into the project directory:
-
-
-
-```bash
-
 cd DeepINKCommunity
-
 ```
 
+### 2. Create a Virtual Environment
 
-
-\### 2. Create a Virtual Environment
-
-On Windows, create a Python virtual environment:
-
-
+On Windows:
 
 ```bash
-
-python -m venv .venv
-
+python -m venv venv
+venv\Scripts\activate
 ```
 
-Activate the virtual environment:
-
-
+### 3. Install Dependencies
 
 ```bash
-
-.venv\\Scripts\\activate
-
+python -m pip install -r requirements.txt
 ```
 
-
-
-After activation, your terminal should show:
-
-
+### 4. Apply Database Migrations
 
 ```bash
-
-(.venv)
-
-```
-
-
-
-\### 3. Install Dependencies
-
-Install the required Python packages:
-
-
-
-```bash
-
-pip install -r requirements.txt
-
-```
-
-
-
-\### 4. Apply Database Migrations
-
-Apply the existing Django database migrations:
-
-
-
-```bash
-
 python manage.py migrate
-
 ```
 
-
-
-\### 5. Create the User Roles
-
-Create the project roles:
-
-
+### 5. Create User Roles
 
 ```bash
-
-python manage.py create\_roles
-
+python manage.py create_roles
 ```
 
-
-
-The project uses the following roles:
-
-* Administrator
-* Manager
-* Staff
-
-
-
-\### 6. Configure Permissions
-
-Configure the project permissions:
-
-
+### 6. Configure Permissions
 
 ```bash
-
-python manage.py setup\_permissions
-
+python manage.py setup_permissions
 ```
 
-
-
-This configures the custom permissions required by the application, including staff account management permissions.
-
-
-
-\### 7. Create an Administrator
-
-Create a Django administrator account:
-
-
+### 7. Create an Administrator
 
 ```bash
-
 python manage.py createsuperuser
-
 ```
 
-
-
-Follow the prompts to create the Django administrator username, email address and password.
-
-
-
-\### 8. Run the Development Server
-
-Start the Django development server:
-
-
+### 8. Run the Application
 
 ```bash
-
 python manage.py runserver
-
 ```
 
+Open:
 
-
-The application will normally be available at:
-
-
-
-```bash
-
+```text
 http://127.0.0.1:8000/
-
 ```
 
+## Two-Factor Authentication
 
+After a staff member successfully enters their username and password:
 
-\## Useful Django Commands
+1. The user is directed to two-factor authentication.
+2. A first-time user scans the displayed QR code using an authenticator application.
+3. The user enters the generated six-digit code.
+4. Recovery codes are provided for emergency access.
+5. Each recovery code can only be used once.
+6. A verified user is redirected to the authorised dashboard.
 
-Check the Project
+Authenticator secrets, QR codes and recovery codes must never be committed to GitHub or included in screenshots.
 
-Check for configuration or code issues:
+## Environment Variables
 
+Production configuration is provided through Azure App Service environment variables.
 
+```text
+DJANGO_SECRET_KEY
+DJANGO_DEBUG
+DJANGO_ALLOWED_HOSTS
+DJANGO_CSRF_TRUSTED_ORIGINS
+DATABASE_URL
+```
+
+Example development values:
+
+```text
+DJANGO_DEBUG=True
+DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
+```
+
+Production passwords, database connection strings, secret keys, OTP secrets and recovery codes must never be committed to the repository.
+
+## Database Configuration
+
+When `DATABASE_URL` is not present, the application uses SQLite for local development.
+
+In production, `DATABASE_URL` contains the Azure PostgreSQL connection string. Django reads the connection using `dj-database-url`, and secure PostgreSQL connections require SSL.
+
+## Static Files
+
+Static files are collected for production with:
 
 ```bash
+python manage.py collectstatic --noinput
+```
 
+WhiteNoise serves the collected static files through the deployed Django application.
+
+## Validation and Testing
+
+The following final checks were completed:
+
+```bash
 python manage.py check
-
-```
-
-
-
-Apply Migrations
-
-
-
-```bash
-
+python manage.py makemigrations --check --dry-run
 python manage.py migrate
-
 ```
 
+Results:
 
-
-Create Migrations
-
-After making changes to Django models:
-
-
-
-```bash
-
-python manage.py makemigrations
-
+```text
+System check identified no issues (0 silenced).
+No changes detected.
+No migrations to apply.
 ```
 
+The following functionality was also tested:
 
+- All five public pages load successfully
+- Volunteer applications generate reference numbers
+- Submitted applications are stored in the database
+- Staff password authentication works
+- Authenticator codes are accepted
+- Invalid codes are rejected
+- Recovery codes are single-use
+- Dashboard pages require authentication
+- Django administration is protected by two-factor authentication
 
-Run Tests
+## Azure Deployment
 
-```bash
+The application is deployed through GitHub Actions to Microsoft Azure App Service.
 
-python manage.py test
+The deployment process:
 
-```
+1. Changes are developed on a feature branch.
+2. A pull request is created.
+3. Team members review the pull request.
+4. Approved changes are merged into `main`.
+5. GitHub Actions deploys the application to Azure.
+6. Database migrations are applied to Azure PostgreSQL.
+7. Static files are collected for production.
 
+## Useful Commands
 
-
-Start the Development Server
-
-```bash
-
-python manage.py runserver
-
-```
-
-
-
-Create Roles
-
-```bash
-
-python manage.py create\_roles
-
-```
-
-
-
-Configure Permissions
-
-```bash
-
-python manage.py setup\_permissions
-
-```
-
-
-
-Create an Administrator
-
-```bash
-
-python manage.py createsuperuser
-
-```
-
-
-
-\###Environment Variables
-
-
-
-Sensitive configuration must not be committed to GitHub.
-
-
-
-The Django secret key should be supplied through an environment variable:
-
-
-
-```bash
-
-DJANGO\_SECRET\_KEY
-
-```
-
-
-
-The project's development settings use:
-
-
-
-```bash
-
-SECRET\_KEY = os.environ.get(
-
-&#x20;   'DJANGO\_SECRET\_KEY',
-
-&#x20;   'dev-only-change-this-secret-key'
-
-)
-
-```
-
-
-
-The fallback value is intended for local development only.
-
-
-
-For production, a secure secret key must be configured through the deployment environment rather than being stored in source control.
-
-
-
-Important: Never commit production secret keys, passwords, API keys, access tokens or other credentials to the repository.
-
-
-
-
-
-\## Important Development Rules
-
-To keep the project secure and prevent conflicts between team members:
-
-1. Do not commit passwords, API keys, secret keys, access tokens or other credentials.
-
-2. Do not commit db.sqlite3.
-
-3. Do not commit virtual environments such as .venv/.
-
-4. Pull the latest changes before beginning team work.
-
-5. Commit changes regularly.
-
-6. Use descriptive Git commit messages.
-
-7. Keep development responsibilities separated according to the team's assigned roles.
-
-8. Do not modify another developer's module unnecessarily.
-
-9. Coordinate changes that affect shared models, URLs or settings before making them.
-
-
-10\. Run the following command before committing:
 ```bash
 python manage.py check
+python manage.py makemigrations
+python manage.py migrate
+python manage.py test
+python manage.py collectstatic --noinput
+python manage.py runserver
+python manage.py create_roles
+python manage.py setup_permissions
+python manage.py createsuperuser
 ```
 
+## Development and Security Rules
 
-
-11\. Test your changes locally before pushing them to GitHub.
-
-12\. Do not overwrite or remove another developer's work without discussing the change with the team.
-
+1. Never commit passwords, secret keys, database URLs or access tokens.
+2. Never commit authenticator secrets, QR codes or recovery codes.
+3. Do not commit `db.sqlite3`.
+4. Do not commit the virtual environment.
+5. Develop new work on a dedicated branch.
+6. Pull the latest `main` branch before starting work.
+7. Use descriptive commit messages.
+8. Test changes locally before pushing them.
+9. Require team review before merging pull requests.
+10. Run `python manage.py check` before committing.
+11. Store production configuration in Azure environment variables.
+12. Keep the Google Search Console verification tag in the website layout.
