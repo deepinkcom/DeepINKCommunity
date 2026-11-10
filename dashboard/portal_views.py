@@ -372,13 +372,27 @@ def volunteer_edit(request, pk):
 
 @dashboard_access_required
 def event_list(request):
-    events = Event.objects.order_by('-start_date')
+    upcoming_events = Event.objects.upcoming()
+    past_events = Event.objects.past()
     return render(
         request,
         'dashboard/events.html',
         {
             **_portal_context(request, 'events', 'Events & Activities'),
-            'events': events,
+            'upcoming_events': upcoming_events,
+            'past_events': past_events,
+        },
+    )
+
+
+def _render_event_form(request, form, title):
+    return render(
+        request,
+        'dashboard/event_form.html',
+        {
+            **_portal_context(request, 'events', title),
+            'form': form,
+            'cancel_url_name': 'event_list',
         },
     )
 
@@ -396,15 +410,22 @@ def event_create(request):
             return redirect('event_list')
     else:
         form = EventForm()
-    return render(
-        request,
-        'dashboard/form.html',
-        {
-            **_portal_context(request, 'events', 'Create Event'),
-            'form': form,
-            'cancel_url_name': 'event_list',
-        },
-    )
+    return _render_event_form(request, form, 'Create Event')
+
+
+@dashboard_access_required
+def event_edit(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if request.method == 'POST':
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            log_audit(request.user, 'update', event, request=request)
+            messages.success(request, 'Event updated successfully.')
+            return redirect('event_list')
+    else:
+        form = EventForm(instance=event)
+    return _render_event_form(request, form, f'Edit {event.title}')
 
 
 # --- Donations ---

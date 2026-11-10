@@ -8,6 +8,7 @@ from app.models import (
     NewsArticle,
     Opportunity,
     PartnerAcknowledgement,
+    PublishStatus,
     SiteSection,
 )
 from .models import (
@@ -231,12 +232,31 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = [
             'title', 'summary', 'body', 'event_type', 'start_date',
-            'end_date', 'location',  'status', 'published_at',
+            'end_date', 'location', 'latitude', 'longitude',
+            'registration_link', 'is_registration_required',
+            'status', 'published_at',
         ]
         widgets = {
-            'start_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'start_date': forms.DateTimeInput(
+                attrs={'type': 'datetime-local'},
+                format='%Y-%m-%dT%H:%M',
+            ),
+            'end_date': forms.DateTimeInput(
+                attrs={'type': 'datetime-local'},
+                format='%Y-%m-%dT%H:%M',
+            ),
+            'latitude': forms.HiddenInput(),
+            'longitude': forms.HiddenInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['start_date'].input_formats = ['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M:%S']
+        self.fields['end_date'].input_formats = ['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M:%S']
+        self.fields['location'].help_text = (
+            'Search or click the map to choose the venue. This location is used for Google Maps directions.'
+        )
+        self.fields['status'].initial = PublishStatus.PUBLISHED
 
 
 class PartnerAcknowledgementForm(forms.ModelForm):

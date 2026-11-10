@@ -3,31 +3,63 @@
 {% block portal_content %}
 <div class="section-card">
     <div class="section-header">
-        <h5>Events, Dialogues, Campaigns & Outreach</h5>
+        <h5>Upcoming events (shown on the website)</h5>
         <a href="{% url 'event_create' %}" class="quick-button">Create Event</a>
     </div>
     <div class="section-body">
-        {% if events %}
+        {% if upcoming_events %}
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
-                    <tr><th>Title</th><th>Type</th><th>Start</th><th>Location</th><th>Status</th></tr>
+                    <tr><th>Title</th><th>Type</th><th>Start</th><th>Location</th><th>Status</th><th></th></tr>
                 </thead>
                 <tbody>
-                    {% for event in events %}
+                    {% for event in upcoming_events %}
                     <tr>
                         <td>{{ event.title }}</td>
                         <td>{{ event.get_event_type_display }}</td>
                         <td>{{ event.start_date|date:"Y-m-d H:i" }}</td>
                         <td>{{ event.location|default:"—" }}</td>
                         <td>{{ event.get_status_display }}</td>
+                        <td><a href="{% url 'event_edit' event.pk %}" class="quick-button">Edit</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         {% else %}
-        <p class="text-muted mb-0">No events scheduled.</p>
+        <p class="text-muted mb-0">No upcoming events. Past events remain stored below.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="section-card">
+    <div class="section-header">
+        <h5>Past events (stored, hidden from the website)</h5>
+    </div>
+    <div class="section-body">
+        {% if past_events %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr><th>Title</th><th>Type</th><th>Start</th><th>Location</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                    {% for event in past_events %}
+                    <tr>
+                        <td>{{ event.title }}</td>
+                        <td>{{ event.get_event_type_display }}</td>
+                        <td>{{ event.start_date|date:"Y-m-d H:i" }}</td>
+                        <td>{{ event.location|default:"—" }}</td>
+                        <td>{{ event.get_status_display }}</td>
+                        <td><a href="{% url 'event_edit' event.pk %}" class="quick-button">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No past events stored yet.</p>
         {% endif %}
     </div>
 </div>

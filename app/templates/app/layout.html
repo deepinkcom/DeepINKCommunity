@@ -71,6 +71,13 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link {% if active_page == 'events' %}active{% endif %}"
+                                href="{% url 'events' %}">
+                                Events
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link {% if active_page == 'get_involved' %}active{% endif %}"
                                 href="{% url 'get_involved' %}">
                                 Get Involved
@@ -153,6 +160,12 @@
                         <li>
                             <a href="{% url 'programmes' %}">
                                 Programmes
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'events' %}">
+                                Events
                             </a>
                         </li>
 

@@ -1,0 +1,183 @@
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="">
+<div class="section-card">
+    <div class="section-header">
+        <h5>{{ page_title }}</h5>
+    </div>
+    <div class="section-body">
+        <form method="post" id="eventForm">
+            {% csrf_token %}
+            {% for field in form %}
+            {% if field.name == 'latitude' or field.name == 'longitude' %}
+                {{ field }}
+            {% else %}
+            <div class="mb-3">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+                {% endif %}
+                {% if field.errors %}
+                <div class="text-danger small">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% if field.name == 'location' %}
+            <div class="mb-3">
+                <label class="form-label" for="mapSearch">Search Google Maps location</label>
+                <div class="d-flex gap-2">
+                    <input type="text" id="mapSearch" class="form-control" placeholder="Search a venue, suburb or address">
+                    <button type="button" class="quick-button" id="mapSearchButton">Search</button>
+                </div>
+                <p class="form-text mb-2">Click the map to drop a pin. Visitors will use this pin for Google Maps directions.</p>
+                <div id="eventMap"></div>
+                <p class="small text-muted mt-2 mb-2" id="mapHint">No pin selected yet.</p>
+                <div id="googlePreviewWrap" hidden>
+                    <label class="form-label">Google Maps preview</label>
+                    <iframe id="googlePreview" title="Google Maps preview"></iframe>
+                    <a id="googleDirections" class="quick-button mt-2" href="#" target="_blank" rel="noopener">
+                        Open directions in Google Maps
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            <div class="d-flex gap-2">
+                <button type="submit" class="quick-button">Save</button>
+                <a href="{% url cancel_url_name %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+<style>
+    .section-body input[type="text"],
+    .section-body input[type="email"],
+    .section-body input[type="tel"],
+    .section-body input[type="number"],
+    .section-body input[type="date"],
+    .section-body input[type="datetime-local"],
+    .section-body input[type="url"],
+    .section-body select,
+    .section-body textarea,
+    #mapSearch {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+    }
+    #eventMap,
+    #googlePreview {
+        height: 360px;
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #ced4da;
+        z-index: 1;
+    }
+    #googlePreviewWrap {
+        margin-top: 16px;
+    }
+</style>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<script>
+    (function () {
+        const latInput = document.getElementById("id_latitude");
+        const lngInput = document.getElementById("id_longitude");
+        const locationInput = document.getElementById("id_location");
+        const searchInput = document.getElementById("mapSearch");
+        const searchButton = document.getElementById("mapSearchButton");
+        const hint = document.getElementById("mapHint");
+        const previewWrap = document.getElementById("googlePreviewWrap");
+        const preview = document.getElementById("googlePreview");
+        const directionsLink = document.getElementById("googleDirections");
+        const defaultCenter = [-26.2041, 28.0473];
+        const startLat = latInput && latInput.value ? parseFloat(latInput.value) : defaultCenter[0];
+        const startLng = lngInput && lngInput.value ? parseFloat(lngInput.value) : defaultCenter[1];
+        const map = L.map("eventMap").setView([startLat, startLng], latInput && latInput.value ? 16 : 12);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map);
+        let marker = latInput && latInput.value
+            ? L.marker([startLat, startLng]).addTo(map)
+            : null;
+
+        function setLocation(lat, lng, label) {
+            latInput.value = lat.toFixed(6);
+            lngInput.value = lng.toFixed(6);
+            if (label && locationInput && !locationInput.value) {
+                locationInput.value = label;
+            } else if (label && locationInput && locationInput.value === "") {
+                locationInput.value = label;
+            } else if (label && locationInput) {
+                locationInput.value = label;
+            }
+            if (marker) {
+                marker.setLatLng([lat, lng]);
+            } else {
+                marker = L.marker([lat, lng]).addTo(map);
+            }
+            hint.textContent = "Selected: " + lat.toFixed(5) + ", " + lng.toFixed(5) +
+                ". Visitors can click this pin on Google Maps for directions.";
+            const query = lat.toFixed(6) + "," + lng.toFixed(6);
+            preview.src = "https://maps.google.com/maps?q=" + encodeURIComponent(query) + "&z=16&output=embed";
+            directionsLink.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(query);
+            previewWrap.hidden = false;
+        }
+
+        if (latInput && latInput.value) {
+            setLocation(startLat, startLng, "");
+        }
+
+        map.on("click", function (event) {
+            setLocation(event.latlng.lat, event.latlng.lng, locationInput.value);
+            fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
+                event.latlng.lat + "&lon=" + event.latlng.lng, {
+                headers: { "Accept": "application/json" }
+            }).then(function (response) { return response.json(); })
+              .then(function (data) {
+                  if (data && data.display_name) {
+                      locationInput.value = data.display_name;
+                  }
+              }).catch(function () {});
+        });
+
+        function searchPlace() {
+            const query = (searchInput.value || locationInput.value || "").trim();
+            if (!query) {
+                return;
+            }
+            fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" +
+                encodeURIComponent(query), {
+                headers: { "Accept": "application/json" }
+            }).then(function (response) { return response.json(); })
+              .then(function (results) {
+                  if (!results.length) {
+                      hint.textContent = "No matching place found. Try a more specific address.";
+                      return;
+                  }
+                  const place = results[0];
+                  const lat = parseFloat(place.lat);
+                  const lng = parseFloat(place.lon);
+                  map.setView([lat, lng], 16);
+                  setLocation(lat, lng, place.display_name);
+              }).catch(function () {
+                  hint.textContent = "Location search is unavailable right now.";
+              });
+        }
+
+        searchButton.addEventListener("click", searchPlace);
+        searchInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchPlace();
+            }
+        });
+    })();
+</script>
+{% endblock %}

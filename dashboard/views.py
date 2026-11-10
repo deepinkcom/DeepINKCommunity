@@ -1,6 +1,4 @@
-from django.utils import timezone
-
-from app.models import Event, PublishStatus
+from app.models import Event
 from .decorators import dashboard_access_required
 from .models import Beneficiary, Programme, ServiceRequest
 from django.shortcuts import render
@@ -8,10 +6,7 @@ from django.shortcuts import render
 
 @dashboard_access_required
 def dashboard(request):
-    upcoming_events = Event.objects.filter(
-        status=PublishStatus.PUBLISHED,
-        start_date__gte=timezone.now(),
-    ).count()
+    upcoming_events = Event.objects.published().upcoming().count()
 
     recent_applications = ServiceRequest.objects.select_related(
         'assigned_to'

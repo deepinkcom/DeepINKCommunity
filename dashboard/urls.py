@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('dashboard/events/', portal_views.event_list, name='event_list'),
     path('dashboard/events/create/', portal_views.event_create, name='event_create'),
+    path('dashboard/events/<int:pk>/edit/', portal_views.event_edit, name='event_edit'),
 
     path('dashboard/referrals/', portal_views.referral_list, name='referral_list'),
     path('dashboard/referrals/create/', portal_views.referral_create, name='referral_create'),

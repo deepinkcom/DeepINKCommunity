@@ -1,0 +1,54 @@
+{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <p class="section-label">{{ event.get_event_type_display|upper }}</p>
+        <h1>{{ event.title }}</h1>
+        <p class="page-hero-description">
+            {{ event.start_date|date:"l d F Y, H:i" }}
+            {% if event.end_date %} – {{ event.end_date|date:"l d F Y, H:i" }}{% endif %}
+        </p>
+    </div>
+</section>
+
+<section class="events-section">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                {% if event.summary %}<p>{{ event.summary }}</p>{% endif %}
+                {% if event.body %}<p>{{ event.body }}</p>{% endif %}
+                <div class="event-details">
+                    <span><i class="bi bi-clock"></i> {{ event.start_date|date:"D d M Y, H:i" }}</span>
+                    <span><i class="bi bi-geo-alt"></i> {{ event.location|default:"Venue to be confirmed" }}</span>
+                </div>
+                {% if event.google_directions_url %}
+                <a class="primary-button event-directions-button" href="{{ event.google_directions_url }}" target="_blank" rel="noopener">
+                    <i class="bi bi-signpost-2"></i>
+                    Get directions on Google Maps
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                {% if event.google_maps_embed_url %}
+                <a class="event-map event-map-large" href="{{ event.google_directions_url }}" target="_blank" rel="noopener">
+                    <iframe
+                        title="Google Map for {{ event.title }}"
+                        src="{{ event.google_maps_embed_url }}"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <span class="event-map-caption">
+                        <i class="bi bi-signpost-2"></i>
+                        Click the map for Google Maps directions
+                    </span>
+                </a>
+                {% else %}
+                <p>A map will appear here once a venue pin is saved for this event.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

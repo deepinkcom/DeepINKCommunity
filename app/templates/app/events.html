@@ -1,0 +1,70 @@
+{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <p class="section-label">WHAT'S ON</p>
+        <h1>Upcoming events</h1>
+        <p class="page-hero-description">
+            Community dialogues, workshops, outreach and awareness activities
+            are listed in date order. Past events are removed from this page
+            and kept in the Centre's records.
+        </p>
+    </div>
+</section>
+
+<section class="events-section">
+    <div class="container">
+        {% if upcoming_events %}
+        <div class="row g-4">
+            {% for event in upcoming_events %}
+            <div class="col-lg-6">
+                <article class="event-card event-card-stacked">
+                    <div class="event-date">
+                        <span>DATE</span>
+                        <strong>{{ event.start_date|date:"d M" }}</strong>
+                    </div>
+                    <div class="event-information">
+                        <p class="event-category">{{ event.get_event_type_display|upper }}</p>
+                        <h3><a href="{% url 'event_detail' event.slug %}">{{ event.title }}</a></h3>
+                        <p>{{ event.summary|default:event.body|truncatewords:28 }}</p>
+                        <div class="event-details">
+                            <span><i class="bi bi-clock"></i> {{ event.start_date|date:"D d M Y, H:i" }}</span>
+                            <span><i class="bi bi-geo-alt"></i> {{ event.location|default:"Venue to be confirmed" }}</span>
+                        </div>
+                        {% if event.google_maps_embed_url %}
+                        <a class="event-map" href="{{ event.google_directions_url }}" target="_blank" rel="noopener">
+                            <iframe
+                                title="Map for {{ event.title }}"
+                                src="{{ event.google_maps_embed_url }}"
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                            <span class="event-map-caption">
+                                <i class="bi bi-signpost-2"></i>
+                                Click the map for Google Maps directions
+                            </span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <article class="event-card">
+            <div class="event-date">
+                <span>DATE</span>
+                <strong>TBC</strong>
+            </div>
+            <div class="event-information">
+                <p class="event-category">COMMUNITY PROGRAMME</p>
+                <h3>No upcoming events</h3>
+                <p>New community events will appear here once they are published.</p>
+            </div>
+        </article>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

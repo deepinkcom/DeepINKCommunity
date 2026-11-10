@@ -245,8 +245,8 @@
                     educational activities and community events.
                 </p>
 
-                <a class="primary-button" href="{% url 'programmes' %}">
-                    View Our Programmes
+                <a class="primary-button" href="{% url 'events' %}">
+                    View All Events
                 </a>
             </div>
 
@@ -260,12 +260,26 @@
                     </div>
                     <div class="event-information">
                         <p class="event-category">{{ event.get_event_type_display|upper }}</p>
-                        <h3>{{ event.title }}</h3>
+                        <h3><a href="{% url 'event_detail' event.slug %}">{{ event.title }}</a></h3>
                         <p>{{ event.summary|default:event.body|truncatewords:30 }}</p>
                         <div class="event-details">
                             <span><i class="bi bi-clock"></i> {{ event.start_date|date:"H:i" }}</span>
                             <span><i class="bi bi-geo-alt"></i> {{ event.location|default:"Venue to be confirmed" }}</span>
                         </div>
+                        {% if event.google_maps_embed_url %}
+                        <a class="event-map" href="{{ event.google_directions_url }}" target="_blank" rel="noopener">
+                            <iframe
+                                title="Map for {{ event.title }}"
+                                src="{{ event.google_maps_embed_url }}"
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                            <span class="event-map-caption">
+                                <i class="bi bi-signpost-2"></i>
+                                Click for directions
+                            </span>
+                        </a>
+                        {% endif %}
                     </div>
                 </article>
                 {% endfor %}

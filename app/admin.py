@@ -42,7 +42,7 @@ class OpportunityAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'event_type', 'start_date', 'status']
+    list_display = ['title', 'event_type', 'start_date', 'location', 'status']
 
 
 @admin.register(PartnerAcknowledgement)

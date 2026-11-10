@@ -1,5 +1,9 @@
+from urllib.parse import quote
+
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
+from django.utils import timezone
 from django.utils.text import slugify
 
 
@@ -183,6 +187,24 @@ class Opportunity(PublishedContent):
         verbose_name_plural = 'Opportunities'
 
 
+class EventQuerySet(models.QuerySet):
+    def published(self):
+        return self.filter(status=PublishStatus.PUBLISHED)
+
+    def upcoming(self):
+        """Events that have not yet ended. Past events stay in the database."""
+        now = timezone.now()
+        return self.filter(
+            Q(end_date__gte=now) | Q(end_date__isnull=True, start_date__gte=now)
+        ).order_by('start_date')
+
+    def past(self):
+        now = timezone.now()
+        return self.filter(
+            Q(end_date__lt=now) | Q(end_date__isnull=True, start_date__lt=now)
+        ).order_by('-start_date')
+
+
 class Event(PublishedContent):
     EVENT_TYPES = [
         ('event', 'Event'),
@@ -196,12 +218,57 @@ class Event(PublishedContent):
     event_type = models.CharField(max_length=30, choices=EVENT_TYPES, default='event')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
-    location = models.CharField(max_length=200, blank=True)
+    location = models.CharField(max_length=500, blank=True)
+    latitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+    )
+    longitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+    )
     registration_link = models.URLField(blank=True)
     is_registration_required = models.BooleanField(default=False)
 
+    objects = EventQuerySet.as_manager()
+
     class Meta:
         ordering = ['start_date']
+
+    @property
+    def has_map_location(self):
+        return self.latitude is not None and self.longitude is not None
+
+    @property
+    def map_query(self):
+        if self.has_map_location:
+            return f'{self.latitude},{self.longitude}'
+        return self.location
+
+    @property
+    def google_maps_url(self):
+        query = self.map_query
+        if not query:
+            return ''
+        return f'https://www.google.com/maps/search/?api=1&query={quote(str(query))}'
+
+    @property
+    def google_directions_url(self):
+        query = self.map_query
+        if not query:
+            return ''
+        return f'https://www.google.com/maps/dir/?api=1&destination={quote(str(query))}'
+
+    @property
+    def google_maps_embed_url(self):
+        query = self.map_query
+        if not query:
+            return ''
+        return f'https://maps.google.com/maps?q={quote(str(query))}&z=16&output=embed'
 
 
 class ContactInformation(models.Model):

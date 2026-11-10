@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.http import HttpRequest
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from app.models import (
     ContactInformation,
@@ -40,9 +40,7 @@ def home(request):
             'title': 'Home',
             'year': datetime.now().year,
             'active_page': 'home',
-            'upcoming_events': _published(Event.objects.filter(
-                start_date__gte=datetime.now(),
-            ))[:3],
+            'upcoming_events': Event.objects.published().upcoming()[:5],
             'latest_news': _published(NewsArticle.objects.all())[:3],
             'opportunities': _published(Opportunity.objects.all())[:3],
             'impact_stories': _published(ImpactStory.objects.all())[:2],
@@ -161,5 +159,41 @@ def contact(request):
             'contact_form': form,
             'contact_info': contact_info,
             'partners': _published(PartnerAcknowledgement.objects.all())[:6],
+        },
+    )
+
+
+def events(request):
+    """Display upcoming public events in chronological order."""
+    assert isinstance(request, HttpRequest)
+
+    return render(
+        request,
+        'app/events.html',
+        {
+            'title': 'Events',
+            'year': datetime.now().year,
+            'active_page': 'events',
+            'upcoming_events': Event.objects.published().upcoming(),
+        },
+    )
+
+
+def event_detail(request, slug):
+    """Display a single upcoming published event with map and directions."""
+    assert isinstance(request, HttpRequest)
+
+    event = get_object_or_404(
+        Event.objects.published().upcoming(),
+        slug=slug,
+    )
+    return render(
+        request,
+        'app/event_detail.html',
+        {
+            'title': event.title,
+            'year': datetime.now().year,
+            'active_page': 'events',
+            'event': event,
         },
     )
