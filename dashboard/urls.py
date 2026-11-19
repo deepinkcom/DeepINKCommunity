@@ -9,6 +9,7 @@ urlpatterns = [
     path('dashboard/beneficiaries/', portal_views.beneficiary_list, name='beneficiary_list'),
     path('dashboard/beneficiaries/create/', portal_views.beneficiary_create, name='beneficiary_create'),
     path('dashboard/beneficiaries/<int:pk>/edit/', portal_views.beneficiary_edit, name='beneficiary_edit'),
+    path('dashboard/beneficiaries/<int:pk>/delete/', portal_views.beneficiary_delete, name='beneficiary_delete'),
 
     path('dashboard/applications/', application_views.application_list, name='application_list'),
     path('dashboard/applications/<int:pk>/', application_views.application_detail, name='application_detail'),

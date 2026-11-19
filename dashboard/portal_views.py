@@ -1163,3 +1163,31 @@ def audit_log_list(request):
             'logs': logs,
         },
     )
+
+from django.views.decorators.http import require_POST
+from django.db import transaction, IntegrityError
+from django.db.models.deletion import ProtectedError, RestrictedError
+from django.core.exceptions import PermissionDenied
+
+
+@admin_required
+@require_POST
+def beneficiary_delete(request, pk):
+    if not request.user.is_active:
+        raise PermissionDenied('Administrator access is required.')
+    try:
+        with transaction.atomic():
+            beneficiary = get_object_or_404(Beneficiary.objects.select_for_update(), pk=pk)
+            # Protect existing programme, application, attendance, document and other linked records.
+            for relation in Beneficiary._meta.get_fields(include_hidden=True):
+                if relation.auto_created and not relation.concrete and relation.is_relation:
+                    if relation.one_to_many or relation.one_to_one or relation.many_to_many:
+                        if relation.related_model._base_manager.filter(**{relation.field.name: beneficiary}).exists():
+                            messages.error(request, 'This beneficiary has linked records. Resolve those links before deleting the beneficiary.')
+                            return redirect('beneficiary_list')
+            log_audit(request.user, 'delete', beneficiary, request=request)
+            beneficiary.delete()
+        messages.success(request, 'Beneficiary permanently deleted.')
+    except (ProtectedError, RestrictedError, IntegrityError):
+        messages.error(request, 'Linked records prevent deletion. No changes were saved.')
+    return redirect('beneficiary_list')

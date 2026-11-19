@@ -39,6 +39,12 @@
                         {% if detail_url_name %}
                         <td>
                             <a href="{% url detail_url_name item.pk %}" class="quick-button">Edit</a>
+                            {% if active_nav == 'beneficiaries' and role == 'Administrator' %}
+                            <form method="post" action="{% url 'beneficiary_delete' item.pk %}" style="display:inline-block;margin-left:6px" onsubmit="return confirm('Permanently delete this beneficiary? This cannot be undone.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                            {% endif %}
                         </td>
                         {% endif %}
                     </tr>
