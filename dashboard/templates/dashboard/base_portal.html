@@ -73,13 +73,9 @@
             <a href="{% url 'event_list' %}" {% if active_nav == 'events' %}class="active"{% endif %}>
                 <i class="bi bi-calendar-event"></i> Events
             </a>
-            <a href="{% url 'referral_list' %}" {% if active_nav == 'referrals' %}class="active"{% endif %}>
-                <i class="bi bi-arrow-left-right"></i> Referrals
-            </a>
+            
             {% if role == 'Administrator' or role == 'Manager' %}
-            <a href="{% url 'donation_list' %}" {% if active_nav == 'donations' %}class="active"{% endif %}>
-                <i class="bi bi-cash-stack"></i> Donations
-            </a>
+            
             {% endif %}
             <a href="{% url 'task_list' %}" {% if active_nav == 'tasks' %}class="active"{% endif %}>
                 <i class="bi bi-check2-square"></i> Tasks
@@ -94,12 +90,8 @@
             {% endif %}
             {% if role == 'Administrator' %}
             <div class="nav-section">Administration</div>
-            <a href="{% url 'content_home' %}" {% if active_nav == 'content' %}class="active"{% endif %}>
-                <i class="bi bi-window"></i> Website Content
-            </a>
-            <a href="{% url 'audit_log_list' %}" {% if active_nav == 'audit' %}class="active"{% endif %}>
-                <i class="bi bi-journal-text"></i> Audit Trail
-            </a>
+            
+            
             <a href="{% url 'staff_accounts' %}">
                 <i class="bi bi-person-gear"></i> Staff Accounts
             </a>

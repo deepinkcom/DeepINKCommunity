@@ -1,6 +1,7 @@
 {% extends "dashboard/base_portal.html" %}
 
 {% block portal_content %}
+<style>.status-approved{background:#d4edda;color:#155724}.status-rejected{background:#f8d7da;color:#721c24}</style>
 <div class="section-card">
     <div class="section-header">
         <h5>Service Requests & Applications</h5>
@@ -26,10 +27,13 @@
                         <td>{{ app.reference_number }}</td>
                         <td>{{ app.get_request_type_display }}</td>
                         <td>{{ app.first_name }} {{ app.last_name }}</td>
-                        <td><span class="status-badge status-{{ app.status }}">{{ app.get_status_display }}</span></td>
+                        <td><span class="status-badge status-{{ app.status }}">{% if app.status == "rejected" %}Declined{% else %}{{ app.get_status_display }}{% endif %}</span></td>
                         <td>{{ app.assigned_to.get_full_name|default:"—" }}</td>
                         <td>{{ app.submitted_at|date:"Y-m-d" }}</td>
-                        <td><a href="{% url 'application_detail' app.pk %}" class="quick-button">Manage</a></td>
+                        <td><a href="{% url 'application_detail' app.pk %}" class="quick-button">View Application</a>{% if can_delete_applications %}
+<form method="post" action="{% url 'application_delete' app.pk %}" style="display:inline-block;margin-left:6px" onsubmit="return confirm('Permanently delete this application? This cannot be undone.');">
+{% csrf_token %}<button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+</form>{% endif %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

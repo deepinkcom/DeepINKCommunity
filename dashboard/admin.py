@@ -19,12 +19,34 @@ from .models import (
     StaffTask,
     VolunteerRecord,
 )
-
+from .forms import BeneficiaryForm
 
 @admin.register(Beneficiary)
 class BeneficiaryAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'category', 'phone', 'is_active']
-    search_fields = ['first_name', 'last_name', 'email', 'phone']
+
+    form = BeneficiaryForm
+
+    list_display = [
+        'first_name',
+        'last_name',
+        'age',
+        'category',
+        'full_phone',
+        'is_active',
+    ]
+
+    search_fields = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+    ]
+
+    list_filter = [
+        'gender',
+        'category',
+        'is_active',
+    ]
 
 
 @admin.register(ServiceRequest)

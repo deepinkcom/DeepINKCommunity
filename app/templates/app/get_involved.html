@@ -3,6 +3,16 @@
 
 {% block content %}
 
+<style>
+.public-form .phone-fields {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;align-items:start;}
+.public-form .phone-fields select,.public-form .phone-fields input{width:100%;min-width:0;}
+.public-form .validation-errors {color:#a12632;font-size:.9rem;margin-top:6px;}
+.public-form .validation-errors ul {padding-left:18px;margin:4px 0;}
+.public-form .phone-hint {display:block;color:#53636b;font-size:.82rem;margin-top:5px;}
+@media(max-width:480px){.public-form .phone-fields{grid-template-columns:1fr;}}
+</style>
+
+
 <!-- Hero -->
         <section class="page-hero get-involved-hero">
             <div class="container">
@@ -172,95 +182,68 @@
                     <div class="col-lg-7">
                         <form class="public-form" id="supportApplication" method="post" action="{% url 'get_involved' %}">
                             {% csrf_token %}
+                            {% if support_form.errors %}<div class="alert alert-danger" role="alert">Please correct the fields below and submit again. {{ support_form.non_field_errors }}</div>{% endif %}
                             <input type="hidden" name="form_type" value="support">
                             <div class="row g-3">
 
                                 <div class="col-md-6">
-                                    <label for="supportFirstName">
+                                    <label for="{{ support_form.firstName.id_for_label }}">
                                         First name
                                     </label>
 
-                                    <input type="text" id="supportFirstName" name="firstName" required>
+                                    {{ support_form.firstName }}<div class="validation-errors">{{ support_form.firstName.errors }}</div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="supportLastName">
+                                    <label for="{{ support_form.lastName.id_for_label }}">
                                         Last name
                                     </label>
 
-                                    <input type="text" id="supportLastName" name="lastName" required>
+                                    {{ support_form.lastName }}<div class="validation-errors">{{ support_form.lastName.errors }}</div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="supportEmail">
+                                    <label for="{{ support_form.email.id_for_label }}">
                                         Email address
                                     </label>
 
-                                    <input type="email" id="supportEmail" name="email" required>
+                                    {{ support_form.email }}<div class="validation-errors">{{ support_form.email.errors }}</div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="supportPhone">
+                                    <label for="{{ support_form.phone.id_for_label }}">
                                         Phone number
                                     </label>
 
-                                    <input type="tel" id="supportPhone" name="phone" required>
+                                    <div class="phone-fields"><div><label class="visually-hidden" for="{{ support_form.country_code.id_for_label }}">Country calling code</label>{{ support_form.country_code }}<div class="validation-errors">{{ support_form.country_code.errors }}</div></div><div>{{ support_form.phone }}<div class="validation-errors">{{ support_form.phone.errors }}</div></div></div><small class="phone-hint">Enter exactly 10 digits, without spaces. South Africa: e.g. 0821234567.</small>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="supportType">
+                                    <label for="{{ support_form.supportType.id_for_label }}">
                                         Type of support
                                     </label>
 
-                                    <select id="supportType" name="supportType" required>
-                                        <option value="">
-                                            Select an option
-                                        </option>
-
-                                        <option value="education">
-                                            Education support
-                                        </option>
-
-                                        <option value="youth">
-                                            Youth development
-                                        </option>
-
-                                        <option value="entrepreneurship">
-                                            Entrepreneurship support
-                                        </option>
-
-                                        <option value="community">
-                                            Community support
-                                        </option>
-
-                                        <option value="referral">
-                                            Referral assistance
-                                        </option>
-
-                                        <option value="other">
-                                            Other
-                                        </option>
-                                    </select>
+                                    {{ support_form.supportType }}<div class="validation-errors">{{ support_form.supportType.errors }}</div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="supportMessage">
+                                    <label for="{{ support_form.message.id_for_label }}">
                                         Tell us what assistance you need
                                     </label>
 
-                                    <textarea id="supportMessage" name="message" rows="5" required></textarea>
+                                    {{ support_form.message }}<div class="validation-errors">{{ support_form.message.errors }}</div>
                                 </div>
 
                                 <div class="col-12">
                                     <label class="consent-field">
-                                        <input type="checkbox" name="consent" required>
+                                        {{ support_form.consent }}
 
                                         <span>
                                             I consent to Deep Ink storing and
                                             processing the information provided
                                             in this application.
                                         </span>
-                                    </label>
+                                    </label><div class="validation-errors">{{ support_form.consent.errors }}</div>
                                 </div>
 
                                 <div class="col-12">
@@ -298,131 +281,84 @@
                     <div class="col-lg-7">
                         <form class="public-form" id="volunteerApplication" method="post" action="{% url 'get_involved' %}">
                             {% csrf_token %}
+                            {% if volunteer_form.errors %}<div class="alert alert-danger" role="alert">Please correct the fields below and submit again. {{ volunteer_form.non_field_errors }}</div>{% endif %}
                             <input type="hidden" name="form_type" value="volunteer">
                             <div class="row g-3">
 
                                 <div class="col-md-6">
-                                    <label for="volunteerFirstName">
+                                    <label for="{{ volunteer_form.firstName.id_for_label }}">
                                         First name
                                     </label>
 
-                                    <input type="text" id="volunteerFirstName" name="firstName" required>
+                                    {{ volunteer_form.firstName }}<div class="validation-errors">{{ volunteer_form.firstName.errors }}</div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="volunteerLastName">
+                                    <label for="{{ volunteer_form.lastName.id_for_label }}">
                                         Last name
                                     </label>
 
-                                    <input type="text" id="volunteerLastName" name="lastName" required>
+                                    {{ volunteer_form.lastName }}<div class="validation-errors">{{ volunteer_form.lastName.errors }}</div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="volunteerEmail">
+                                    <label for="{{ volunteer_form.email.id_for_label }}">
                                         Email address
                                     </label>
 
-                                    <input type="email" id="volunteerEmail" name="email" required>
+                                    {{ volunteer_form.email }}<div class="validation-errors">{{ volunteer_form.email.errors }}</div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="volunteerPhone">
+                                    <label for="{{ volunteer_form.phone.id_for_label }}">
                                         Phone number
                                     </label>
 
-                                    <input type="tel" id="volunteerPhone" name="phone" required>
+                                    <div class="phone-fields"><div><label class="visually-hidden" for="{{ volunteer_form.country_code.id_for_label }}">Country calling code</label>{{ volunteer_form.country_code }}<div class="validation-errors">{{ volunteer_form.country_code.errors }}</div></div><div>{{ volunteer_form.phone }}<div class="validation-errors">{{ volunteer_form.phone.errors }}</div></div></div><small class="phone-hint">Enter exactly 10 digits, without spaces. South Africa: e.g. 0821234567.</small>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="volunteerInterest">
+                                    <label for="{{ volunteer_form.interest.id_for_label }}">
                                         Area of interest
                                     </label>
 
-                                    <select id="volunteerInterest" name="interest" required>
-                                        <option value="">
-                                            Select an option
-                                        </option>
-
-                                        <option value="education">
-                                            Education
-                                        </option>
-
-                                        <option value="youth">
-                                            Youth development
-                                        </option>
-
-                                        <option value="events">
-                                            Events
-                                        </option>
-
-                                        <option value="outreach">
-                                            Community outreach
-                                        </option>
-
-                                        <option value="administration">
-                                            Administration
-                                        </option>
-
-                                        <option value="other">
-                                            Other
-                                        </option>
-                                    </select>
+                                    {{ volunteer_form.interest }}<div class="validation-errors">{{ volunteer_form.interest.errors }}</div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="volunteerAvailability">
+                                    <label for="{{ volunteer_form.availability.id_for_label }}">
                                         Availability
                                     </label>
 
-                                    <select id="volunteerAvailability" name="availability" required>
-                                        <option value="">
-                                            Select an option
-                                        </option>
-
-                                        <option value="weekdays">
-                                            Weekdays
-                                        </option>
-
-                                        <option value="weekends">
-                                            Weekends
-                                        </option>
-
-                                        <option value="events">
-                                            Special events only
-                                        </option>
-
-                                        <option value="flexible">
-                                            Flexible
-                                        </option>
-                                    </select>
+                                    {{ volunteer_form.availability }}<div class="validation-errors">{{ volunteer_form.availability.errors }}</div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="volunteerSkills">
+                                    <label for="{{ volunteer_form.skills.id_for_label }}">
                                         Skills and experience
                                     </label>
 
-                                    <textarea id="volunteerSkills" name="skills" rows="4" required></textarea>
+                                    {{ volunteer_form.skills }}<div class="validation-errors">{{ volunteer_form.skills.errors }}</div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="volunteerMotivation">
+                                    <label for="{{ volunteer_form.motivation.id_for_label }}">
                                         Why would you like to volunteer?
                                     </label>
 
-                                    <textarea id="volunteerMotivation" name="motivation" rows="4" required></textarea>
+                                    {{ volunteer_form.motivation }}<div class="validation-errors">{{ volunteer_form.motivation.errors }}</div>
                                 </div>
 
                                 <div class="col-12">
                                     <label class="consent-field">
-                                        <input type="checkbox" name="consent" required>
+                                        {{ volunteer_form.consent }}
 
                                         <span>
                                             I consent to Deep Ink storing and
                                             processing the information provided
                                             in this application.
                                         </span>
-                                    </label>
+                                    </label><div class="validation-errors">{{ volunteer_form.consent.errors }}</div>
                                 </div>
 
                                 <div class="col-12">

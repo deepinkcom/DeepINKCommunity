@@ -255,4 +255,26 @@ SECURE_PROXY_SSL_HEADER = (
 # --------------------------------------------------
 
 # During development, emails appear in the command window.
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# SMTP Email Configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'mail.deepinkcommunity.org.za'
+EMAIL_PORT = 465
+
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+
+EMAIL_HOST_USER = 'noreply@deepinkcommunity.org.za'
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD')
+
+DEFAULT_FROM_EMAIL = 'Deep INK Community Centre <noreply@deepinkcommunity.org.za>'
+
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_TIMEOUT = 30
+PASSWORD_RESET_TIMEOUT = 86400
+
+# Deep INK welcome invitation URL configuration
+import os
+STAFF_PORTAL_URL = os.getenv('DJANGO_STAFF_PORTAL_URL', 'http://127.0.0.1:8000' if DEBUG else '')
+PASSWORD_RESET_TIMEOUT = 86400

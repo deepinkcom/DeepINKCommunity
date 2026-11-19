@@ -1,3 +1,5 @@
+from django.db import IntegrityError
+from .username_sequence import next_staff_username
 from django import forms
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
@@ -55,7 +57,6 @@ class StaffCreationForm(UserCreationForm):
         fields = (
             'first_name',
             'last_name',
-            'username',
             'email',
             'phone_number',
             'job_title',
@@ -63,6 +64,16 @@ class StaffCreationForm(UserCreationForm):
             'password1',
             'password2',
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        style_staff_fields(self)
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].strip()
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError('An account with this email already exists.')
+        return email
 
     def save(self, commit=True):
 
@@ -74,6 +85,9 @@ class StaffCreationForm(UserCreationForm):
 
         if commit:
 
+            user.username = next_staff_username()
+            if User.objects.filter(email__iexact=user.email).exists():
+                raise IntegrityError("An account already uses this email.")
             user.save()
 
             role = self.cleaned_data['role']
@@ -115,8 +129,9 @@ class StaffEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.staff_profile = kwargs.pop('staff_profile', None)
         super().__init__(*args, **kwargs)
+        style_staff_fields(self)
 
-        if self.staff_profile:
+        if self.staff_profile is not None:
             self.fields['phone_number'].initial = self.staff_profile.phone_number
             self.fields['job_title'].initial = self.staff_profile.job_title
 
@@ -125,41 +140,21 @@ class StaffEditForm(forms.ModelForm):
             if current_role:
                 self.fields['role'].initial = current_role
 
+    def clean_email(self):
+        email = self.cleaned_data['email'].strip()
+        if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError('An account with this email already exists.')
+        return email
+
     def clean(self):
         cleaned_data = super().clean()
-
-        role = cleaned_data.get('role')
-
-        if role and self.instance.pk:
-            current_is_admin = self.instance.groups.filter(
-                name='Administrator'
-            ).exists()
-
-            changing_from_admin = (
-                current_is_admin and role.name != 'Administrator'
-            )
-
-            if changing_from_admin:
-                active_admin_count = User.objects.filter(
-                    is_active=True,
-                    groups__name='Administrator',
-                    staff_profile__is_active_staff=True
-                ).exclude(
-                    id=self.instance.id
-                ).distinct().count()
-
-                if active_admin_count == 0:
-                    self.add_error(
-                        'role',
-                        'The last active Administrator cannot be changed to another role.'
-                    )
 
         return cleaned_data
 
     def save(self, commit=True):
         user = super().save(commit=commit)
 
-        if self.staff_profile:
+        if self.staff_profile is not None:
             self.staff_profile.phone_number = self.cleaned_data['phone_number']
             self.staff_profile.job_title = self.cleaned_data['job_title']
 
@@ -172,3 +167,10 @@ class StaffEditForm(forms.ModelForm):
         user.groups.add(role)
 
         return user
+
+def style_staff_fields(form):
+    for name, field in form.fields.items():
+        field.widget.attrs['class'] = 'form-select' if isinstance(field.widget, forms.Select) else 'form-control'
+        if name == 'phone_number':
+            field.widget.attrs.update({'inputmode': 'tel', 'placeholder': '0821234567'})
+

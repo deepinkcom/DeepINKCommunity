@@ -1,0 +1,18 @@
+{% extends "dashboard/base_portal.html" %}
+{% block portal_content %}
+<div class="section-card">
+  <div class="section-header"><h5>Documents</h5><a href="{% url 'document_create' %}" class="quick-button"><i class="bi bi-plus-lg me-1"></i> Add New</a></div>
+  <div class="section-body">
+    <div class="table-responsive"><table class="table table-hover align-middle">
+      <thead><tr><th>Title</th><th>Category</th><th>Uploaded at</th><th>Actions</th></tr></thead>
+      <tbody>{% for item in items %}<tr>
+        <td>{{ item.title }}</td><td>{{ item.get_category_display }}</td><td>{{ item.uploaded_at|date:"Y-m-d H:i" }}</td>
+        <td>{% if item.file %}
+          <a class="btn btn-sm btn-outline-secondary me-1" href="{% url 'document_preview' item.pk %}" target="_blank" rel="noopener noreferrer"><i class="bi bi-eye me-1"></i> Preview</a>
+          <a class="quick-button" href="{% url 'document_download' item.pk %}"><i class="bi bi-download me-1"></i> Download</a>
+        {% else %}<span class="text-muted">File unavailable</span>{% endif %}</td>
+      </tr>{% empty %}<tr><td colspan="4" class="text-muted">No documents found.</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </div>
+</div>
+{% endblock %}

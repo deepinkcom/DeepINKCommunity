@@ -1,0 +1,8 @@
+{% extends "dashboard/base_portal.html" %}
+{% block portal_content %}
+<div class="section-card"><div class="section-header"><h5>{{ document.title }}</h5></div><div class="section-body">
+<p>This file type cannot be previewed in the browser. Download it to open it on your device.</p>
+<a class="quick-button" href="{% url 'document_download' document.pk %}"><i class="bi bi-download me-1"></i> Download</a>
+<a class="btn btn-outline-secondary" href="{% url 'document_list' %}">Back to Documents</a>
+</div></div>
+{% endblock %}
