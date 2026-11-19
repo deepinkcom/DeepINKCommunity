@@ -1,62 +1,49 @@
 {% extends "dashboard/base_portal.html" %}
-
 {% block portal_content %}
-<div class="row g-4">
-    <div class="col-lg-8">
-        <div class="section-card">
-            <div class="section-header">
-                <h5>{{ application.reference_number }} — {{ application.get_request_type_display }}</h5>
-                <span class="status-badge status-{{ application.status }}">{{ application.get_status_display }}</span>
-            </div>
-            <div class="section-body">
-                <p><strong>Applicant:</strong> {{ application.first_name }} {{ application.last_name }}</p>
-                <p><strong>Email:</strong> {{ application.email }} | <strong>Phone:</strong> {{ application.phone|default:"—" }}</p>
-                <p><strong>Message:</strong></p>
-                <p>{{ application.message }}</p>
-                <hr>
-                <form method="post">
-                    {% csrf_token %}
-                    {% for field in form %}
-                    <div class="mb-3">
-                        <label class="form-label">{{ field.label }}</label>
-                        {{ field }}
-                    </div>
-                    {% endfor %}
-                    <button type="submit" class="quick-button">Update Application</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="section-card">
-            <div class="section-header"><h5>Follow-ups</h5></div>
-            <div class="section-body">
-                <a href="{% url 'follow_up_create' %}?request={{ application.pk }}" class="quick-button mb-3">Record Follow-up</a>
-                {% for fu in follow_ups %}
-                <div class="mb-2 pb-2 border-bottom">
-                    <small class="text-muted">{{ fu.follow_up_date|date:"Y-m-d H:i" }}</small>
-                    <p class="mb-0 small">{{ fu.notes }}</p>
-                </div>
-                {% empty %}
-                <p class="text-muted small">No follow-ups recorded.</p>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="section-card">
-            <div class="section-header"><h5>Documents</h5></div>
-            <div class="section-body">
-                {% for doc in documents %}
-                <p class="mb-1"><a href="{{ doc.file.url }}">{{ doc.title }}</a></p>
-                {% empty %}
-                <p class="text-muted small">No documents attached.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
 <style>
-    .section-body input, .section-body select, .section-body textarea {
-        width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 6px;
-    }
+.application-field {padding:14px;background:#f4f7f7;border-radius:8px;height:100%;overflow-wrap:anywhere}
+.application-field small {display:block;color:#617480;margin-bottom:5px;font-weight:600}
+.status-approved {background:#d4edda;color:#155724}
+.status-rejected {background:#f8d7da;color:#721c24}
+.application-message {white-space:pre-wrap;overflow-wrap:anywhere}
 </style>
+<a href="{% url 'application_list' %}" class="btn btn-outline-secondary btn-sm mb-3">← Back to Applications</a>
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="section-card">
+      <div class="section-header"><h5>Application {{ application.reference_number }}</h5><span class="status-badge status-{{ application.status }}">{% if application.status == 'rejected' %}Declined{% else %}{{ application.get_status_display }}{% endif %}</span></div>
+      <div class="section-body">
+        <h5 class="mb-3">Applicant information</h5>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6"><div class="application-field"><small>Full name</small>{{ application.first_name }} {{ application.last_name }}</div></div>
+          <div class="col-md-6"><div class="application-field"><small>Application type</small>{{ application.get_request_type_display }}</div></div>
+          <div class="col-md-6"><div class="application-field"><small>Email address</small>{{ application.email }}</div></div>
+          <div class="col-md-6"><div class="application-field"><small>Phone number</small>{{ application.phone|default:'—' }}</div></div>
+          <div class="col-md-6"><div class="application-field"><small>Submitted</small>{{ application.submitted_at|date:'d M Y, H:i' }}</div></div>
+          <div class="col-md-6"><div class="application-field"><small>Consent provided</small>{{ application.consent_given|yesno:'Yes,No' }}</div></div>
+          {% if application.education_detail %}<div class="col-md-6"><div class="application-field"><small>Education detail</small>{{ application.get_education_detail_display }}</div></div>{% endif %}
+          {% if application.beneficiary %}<div class="col-md-6"><div class="application-field"><small>Linked beneficiary</small>{{ application.beneficiary }}</div></div>{% endif %}
+          {% if application.assigned_to %}<div class="col-md-6"><div class="application-field"><small>Assigned to</small>{{ application.assigned_to.get_full_name|default:application.assigned_to.username }}</div></div>{% endif %}
+        </div>
+        <h5>Applicant message</h5><div class="application-field application-message mb-4">{{ application.message|default:'No message provided.' }}</div>
+        {% if application.extra_data %}<h5>Additional information</h5><div class="row g-3 mb-4">{% for key,value in application.extra_data.items %}<div class="col-md-6"><div class="application-field"><small>{{ key }}</small>{{ value }}</div></div>{% endfor %}</div>{% endif %}
+        {% if can_decide %}
+        <hr><h5>Review decision</h5>
+        {% if application.request_type == 'volunteer' %}<p class="text-muted">Approval creates a Staff account and sends a secure password setup invitation. Only approve verified applicants.</p>{% else %}<p class="text-muted">Approval records the decision only. No staff account will be created.</p>{% endif %}
+        <form method="post">{% csrf_token %}
+          <label for="resolution_notes" class="form-label">Decision notes (required for decline)</label>
+          <textarea id="resolution_notes" name="resolution_notes" class="form-control mb-3" rows="3"></textarea>
+          <div class="d-flex gap-2 flex-wrap"><button name="action" value="approve" class="btn btn-success" onclick="return confirm('Approve this application?')">✓ Approve Application</button><button name="action" value="decline" class="btn btn-outline-danger" onclick="return confirm('Decline this application?')">✕ Decline Application</button></div>
+        </form>
+        {% elif application.closed_at %}<hr><h5>Decision record</h5><p>{{ application.closed_at|date:'d M Y, H:i' }} · {{ application.closed_by|default:'—' }}</p><p class="application-message">{{ application.resolution_notes|default:'No decision notes.' }}</p>{% endif %}
+        {% if application.approved_staff %}<div class="alert alert-success mt-3"><strong>Staff account:</strong> {{ application.approved_staff.username }}<br>Role at approval: Staff</div>{% endif %}
+        {% if can_resend %}<form method="post">{% csrf_token %}<button class="btn btn-outline-secondary" name="action" value="resend">Resend invitation</button></form>{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="section-card"><div class="section-header"><h5>Follow-ups</h5></div><div class="section-body"><a href="{% url 'follow_up_create' %}?request={{ application.pk }}" class="quick-button mb-3">Record Follow-up</a>{% for fu in follow_ups %}<div class="mb-2 pb-2 border-bottom"><small class="text-muted">{{ fu.follow_up_date|date:'Y-m-d H:i' }}</small><p class="mb-0 small">{{ fu.notes }}</p></div>{% empty %}<p class="text-muted small">No follow-ups recorded.</p>{% endfor %}</div></div>
+    <div class="section-card"><div class="section-header"><h5>Documents</h5></div><div class="section-body">{% for doc in documents %}<p class="mb-1"><a href="{% url 'document_download' doc.pk %}">{{ doc.title }}</a></p>{% empty %}<p class="text-muted small">No documents attached.</p>{% endfor %}</div></div>
+  </div>
+</div>
 {% endblock %}

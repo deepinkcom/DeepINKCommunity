@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -80,7 +81,7 @@ def beneficiary_list(request):
         {
             **_portal_context(request, 'beneficiaries', 'Beneficiaries'),
             'items': beneficiaries,
-            'columns': ['full_name', 'category', 'phone', 'email'],
+            'columns': ['full_name', 'age', 'category', 'full_phone', 'email'],
             'create_url_name': 'beneficiary_create',
             'detail_url_name': 'beneficiary_edit',
         },
@@ -102,7 +103,7 @@ def beneficiary_create(request):
         form = BeneficiaryForm()
     return render(
         request,
-        'dashboard/form.html',
+        'dashboard/beneficiary_form.html',
         {
             **_portal_context(request, 'beneficiaries', 'Register Beneficiary'),
             'form': form,
@@ -307,9 +308,17 @@ def attendance_create(request):
 
 # --- Volunteers ---
 
+def visible_volunteers():
+    return VolunteerRecord.objects.filter(
+        Q(service_request__isnull=True) |
+        Q(service_request__request_type='volunteer',
+          service_request__status=RequestStatus.APPROVED)
+    )
+
+
 @dashboard_access_required
 def volunteer_list(request):
-    volunteers = VolunteerRecord.objects.all()
+    volunteers = visible_volunteers()
     return render(
         request,
         'dashboard/list.html',
@@ -347,7 +356,7 @@ def volunteer_create(request):
 
 @dashboard_access_required
 def volunteer_edit(request, pk):
-    volunteer = get_object_or_404(VolunteerRecord, pk=pk)
+    volunteer = get_object_or_404(visible_volunteers(), pk=pk)
     if request.method == 'POST':
         form = VolunteerRecordForm(request.POST, instance=volunteer)
         if form.is_valid():
@@ -599,10 +608,12 @@ def follow_up_create(request):
 
 @dashboard_access_required
 def document_list(request):
+    from . import document_file_views
+    document_file_views.can_access(request.user)
     documents = Document.objects.select_related('uploaded_by')
     return render(
         request,
-        'dashboard/list.html',
+        'dashboard/documents.html',
         {
             **_portal_context(request, 'documents', 'Documents'),
             'items': documents,

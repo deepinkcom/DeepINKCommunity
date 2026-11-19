@@ -37,3 +37,19 @@ htmlcov/
 # IDE / editor
 .idea/
 .vscode/
+
+# Local environment and sensitive data
+.env
+.env.*
+venv/
+.venv/
+db.sqlite3
+media/
+__pycache__/
+*.pyc
+
+# Update installers and backups
+*backup*/
+install_*.py
+disable_modules.py
+website_source/

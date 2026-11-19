@@ -50,4 +50,5 @@ urlpatterns = [
         views.toggle_staff_status,
         name='toggle_staff_status',
     ),
+    path('staff/<int:user_id>/delete/', views.delete_staff_account, name='delete_staff_account'),
 ]

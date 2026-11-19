@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.utils import timezone
+import phonenumbers
 
 from app.models import (
     ContactInformation,
@@ -32,11 +34,56 @@ from .utils import get_staff_users
 
 
 class BeneficiaryForm(forms.ModelForm):
+
+    COUNTRY_CODE_CHOICES = [
+        ('+27', 'South Africa (+27)')
+    ] + [
+        (
+            f'+{phonenumbers.country_code_for_region(region)}',
+            f'{region} (+{phonenumbers.country_code_for_region(region)})'
+        )
+        for region in sorted(phonenumbers.SUPPORTED_REGIONS)
+        if region != 'ZA'
+    ]
+
+    country_code = forms.ChoiceField(
+        choices=COUNTRY_CODE_CHOICES,
+        initial='+27'
+    )
+
+    guardian_country_code = forms.ChoiceField(
+        choices=COUNTRY_CODE_CHOICES,
+        initial='+27',
+        required=False
+    )
+
     class Meta:
         model = Beneficiary
+
         fields = [
-            'first_name', 'last_name', 'date_of_birth', 'gender',
-            'phone', 'email', 'address', 'category', 'support_needs', 'notes',
+            'first_name',
+            'last_name',
+            'date_of_birth',
+            'gender',
+            'country_code',
+            'phone',
+            'email',
+            'address_line_1',
+            'address_line_2',
+            'suburb',
+            'city',
+            'province',
+            'postal_code',
+            'country',
+            'guardian_first_name',
+            'guardian_last_name',
+            'guardian_relationship',
+            'guardian_country_code',
+            'guardian_phone',
+            'guardian_email',
+            'category',
+            'support_needs',
+            'notes',
         ]
 
         widgets = {
@@ -44,7 +91,92 @@ class BeneficiaryForm(forms.ModelForm):
                 attrs={'type': 'date'},
                 format='%Y-%m-%d',
             ),
+            'phone': forms.TextInput(attrs={
+                'type': 'tel',
+                'maxlength': '10',
+                'minlength': '10',
+                'pattern': '[0-9]{10}',
+                'inputmode': 'numeric',
+                'placeholder': '0821234567',
+            }),
+            'guardian_phone': forms.TextInput(attrs={
+                'type': 'tel',
+                'maxlength': '10',
+                'minlength': '10',
+                'pattern': '[0-9]{10}',
+                'inputmode': 'numeric',
+                'placeholder': '0821234567',
+            }),
+            'email': forms.EmailInput(attrs={
+                'placeholder': 'name@example.com',
+            }),
+            'guardian_email': forms.EmailInput(),
+            'support_needs': forms.Textarea(attrs={
+                'rows': 3
+            }),
+            'notes': forms.Textarea(attrs={
+                'rows': 3
+            }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['date_of_birth'].required = True
+        self.fields['gender'].required = True
+
+        self.fields['date_of_birth'].widget.attrs['max'] = (
+            timezone.localdate().isoformat()
+        )
+
+        for field in self.fields.values():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs['class'] = 'form-select'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+
+        self.fields['address_line_1'].widget.attrs[
+            'placeholder'
+        ] = 'Street number and street name'
+
+        self.fields['address_line_2'].widget.attrs[
+            'placeholder'
+        ] = 'Complex, unit or apartment'
+
+        self.fields['postal_code'].widget.attrs[
+            'placeholder'
+        ] = '0000'
+
+        self.fields['guardian_relationship'].label = (
+            'Relationship to beneficiary'
+        )
+
+        self.fields['guardian_phone'].label = 'Contact number'
+        self.fields['guardian_email'].label = 'Email address'
+
+    def save(self, commit=True):
+        beneficiary = super().save(commit=False)
+
+        address_parts = [
+            beneficiary.address_line_1,
+            beneficiary.address_line_2,
+            beneficiary.suburb,
+            beneficiary.city,
+            beneficiary.province,
+            beneficiary.postal_code,
+            beneficiary.country,
+        ]
+
+        if beneficiary.address_line_1:
+            beneficiary.address = ', '.join(
+                part for part in address_parts if part
+            )
+
+        if commit:
+            beneficiary.save()
+            self.save_m2m()
+
+        return beneficiary
 
 
 class ServiceRequestForm(forms.ModelForm):

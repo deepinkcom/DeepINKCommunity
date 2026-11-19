@@ -1,0 +1,366 @@
+
+{% extends "dashboard/base_portal.html" %}
+
+{% block portal_content %}
+
+<style>
+    .form-section {
+        padding: 20px;
+        margin-bottom: 22px;
+        border: 1px solid #e1e5e7;
+        border-radius: 8px;
+        background: #fff;
+    }
+
+    .form-section h5 {
+        color: #286d6d;
+        font-size: 16px;
+        font-weight: 600;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e1e5e7;
+    }
+
+    .form-label {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .required {
+        color: #dc3545;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    #beneficiary-age {
+        font-size: 13px;
+        color: #286d6d;
+        margin-top: 6px;
+    }
+</style>
+
+<div class="section-card">
+    <div class="section-header">
+        <h5>{{ page_title }}</h5>
+    </div>
+
+    <div class="section-body">
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                Please correct the highlighted fields.
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <!-- PERSONAL INFORMATION -->
+            <div class="form-section">
+                <h5>
+                    <i class="bi bi-person me-2"></i>
+                    Personal Information
+                </h5>
+
+                <div class="row g-3">
+                    {% for field in form %}
+                    {% if field.name == 'first_name' or field.name == 'last_name' or field.name == 'date_of_birth' or field.name == 'gender' %}
+
+                    <div class="col-md-6">
+                        <label class="form-label"
+                               for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                            <span class="required">*</span>
+                            {% endif %}
+                        </label>
+
+                        {{ field }}
+
+                        <div class="text-danger small">
+                            {{ field.errors }}
+                        </div>
+
+                        {% if field.name == 'date_of_birth' %}
+                        <div id="beneficiary-age"></div>
+                        {% endif %}
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Phone Number
+                        </label>
+
+                        <div class="row g-2">
+                            <div class="col-5">
+                                {{ form.country_code }}
+                                {{ form.country_code.errors }}
+                            </div>
+
+                            <div class="col-7">
+                                {{ form.phone }}
+                                <div class="text-danger small">
+                                    {{ form.phone.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <small class="text-muted">
+                            Enter exactly 10 digits.
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Email Address
+                        </label>
+                        {{ form.email }}
+                        <div class="text-danger small">
+                            {{ form.email.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESIDENTIAL ADDRESS -->
+            <div class="form-section">
+                <h5>
+                    <i class="bi bi-geo-alt me-2"></i>
+                    Residential Address
+                </h5>
+
+                {% if form.instance.address and not form.instance.address_line_1 %}
+                <div class="alert alert-info">
+                    Previously recorded address:
+                    {{ form.instance.address }}
+                </div>
+                {% endif %}
+
+                <div class="row g-3">
+                    {% for field in form %}
+                    {% if field.name == 'address_line_1' or field.name == 'address_line_2' or field.name == 'suburb' or field.name == 'city' or field.name == 'province' or field.name == 'postal_code' or field.name == 'country' %}
+
+                    <div class="col-md-6">
+                        <label class="form-label"
+                               for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        <div class="text-danger small">
+                            {{ field.errors }}
+                        </div>
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- GUARDIAN INFORMATION -->
+            <div class="form-section" id="guardian-section">
+                <h5>
+                    <i class="bi bi-people me-2"></i>
+                    Parent / Guardian Information
+                </h5>
+
+                <div class="alert alert-info py-2">
+                    Required for beneficiaries younger than
+                    18 years.
+                </div>
+
+                <div class="row g-3">
+                    {% for field in form %}
+                    {% if field.name == 'guardian_first_name' or field.name == 'guardian_last_name' or field.name == 'guardian_relationship' %}
+
+                    <div class="col-md-6">
+                        <label class="form-label"
+                               for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        <div class="text-danger small">
+                            {{ field.errors }}
+                        </div>
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Guardian Contact Number
+                        </label>
+
+                        <div class="row g-2">
+                            <div class="col-5">
+                                {{ form.guardian_country_code }}
+                                {{ form.guardian_country_code.errors }}
+                            </div>
+
+                            <div class="col-7">
+                                {{ form.guardian_phone }}
+
+                                <div class="text-danger small">
+                                    {{ form.guardian_phone.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Guardian Email Address
+                        </label>
+
+                        {{ form.guardian_email }}
+
+                        <div class="text-danger small">
+                            {{ form.guardian_email.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUPPORT INFORMATION -->
+            <div class="form-section">
+                <h5>
+                    <i class="bi bi-heart me-2"></i>
+                    Support Information
+                </h5>
+
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    {{ form.category }}
+                    {{ form.category.errors }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Support Needs</label>
+                    {{ form.support_needs }}
+                    {{ form.support_needs.errors }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Notes</label>
+                    {{ form.notes }}
+                    {{ form.notes.errors }}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url cancel_url_name %}"
+                   class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+
+                <button type="submit" class="quick-button">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Save Beneficiary
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const dob = document.getElementById('id_date_of_birth');
+    const ageDisplay = document.getElementById('beneficiary-age');
+    const guardianSection = document.getElementById('guardian-section');
+
+    const guardianFields = [
+        'id_guardian_first_name',
+        'id_guardian_last_name',
+        'id_guardian_relationship',
+        'id_guardian_country_code',
+        'id_guardian_phone'
+    ];
+
+    function updateAge() {
+
+        if (!dob.value) {
+            ageDisplay.textContent = '';
+            guardianSection.style.display = '';
+
+            guardianFields.forEach(function(id) {
+                document.getElementById(id).required = false;
+            });
+
+            return;
+        }
+
+        const parts = dob.value.split('-').map(Number);
+
+        const birthDate = new Date(
+            parts[0],
+            parts[1] - 1,
+            parts[2]
+        );
+
+        const today = new Date();
+
+        let age = today.getFullYear() -
+                  birthDate.getFullYear();
+
+        const month = today.getMonth() -
+                      birthDate.getMonth();
+
+        if (month < 0 ||
+            (month === 0 &&
+             today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        if (birthDate > today) {
+            ageDisplay.textContent = 'Invalid date of birth';
+            return;
+        }
+
+        ageDisplay.textContent = 'Age: ' + age + ' years';
+
+        const isMinor = age < 18;
+
+        const hasGuardianDetails = guardianFields
+            .filter(id => id !== 'id_guardian_country_code')
+            .some(id => document.getElementById(id).value)
+            || document.getElementById('id_guardian_email').value;
+
+        guardianSection.style.display =
+            isMinor || hasGuardianDetails ? '' : 'none';
+
+        guardianFields.forEach(function(id) {
+            document.getElementById(id).required = isMinor;
+        });
+    }
+
+    dob.addEventListener('change', updateAge);
+
+    updateAge();
+
+    ['id_phone', 'id_guardian_phone'].forEach(function(id) {
+
+        const input = document.getElementById(id);
+
+        input.addEventListener('input', function() {
+            this.value = this.value
+                .replace(/[^0-9]/g, '')
+                .slice(0, 10);
+        });
+    });
+});
+</script>
+
+{% endblock %}

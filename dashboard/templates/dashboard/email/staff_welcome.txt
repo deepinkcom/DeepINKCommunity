@@ -1,0 +1,20 @@
+WELCOME TO DEEP INK COMMUNITY CENTRE
+
+Hi {{ first_name|default:"there" }},
+
+Congratulations! Your volunteer application has been approved and your staff portal account is ready.
+
+Username: {{ username }}
+Access level: Staff (Volunteer)
+
+1. Create your own password using this secure, single-use link (expires after 24 hours):
+{{ setup_url }}
+
+2. Install Google Authenticator or Microsoft Authenticator from your smartphone's official app store. Two-factor authentication is required.
+
+3. Sign in at {{ login_url }} using your username and new password. Scan the QR code shown on the setup page using your authenticator app. Enter the six-digit code to confirm setup, then save your recovery codes privately. Future sign-ins require an authenticator code or a recovery code if you lose access to your app.
+
+If your activation link expires before you set your password, contact your Deep INK administrator for a new invitation. Never share your link, password, authentication codes or recovery codes.
+
+Warm regards,
+Deep INK Community Centre

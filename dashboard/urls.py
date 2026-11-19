@@ -1,5 +1,6 @@
+from . import document_file_views
 from django.urls import path
-
+from . import application_views
 from . import portal_views, views
 
 urlpatterns = [
@@ -9,8 +10,9 @@ urlpatterns = [
     path('dashboard/beneficiaries/create/', portal_views.beneficiary_create, name='beneficiary_create'),
     path('dashboard/beneficiaries/<int:pk>/edit/', portal_views.beneficiary_edit, name='beneficiary_edit'),
 
-    path('dashboard/applications/', portal_views.application_list, name='application_list'),
-    path('dashboard/applications/<int:pk>/', portal_views.application_detail, name='application_detail'),
+    path('dashboard/applications/', application_views.application_list, name='application_list'),
+    path('dashboard/applications/<int:pk>/', application_views.application_detail, name='application_detail'),
+    path('dashboard/applications/<int:pk>/delete/', application_views.application_delete, name='application_delete'),
 
     path('dashboard/programmes/', portal_views.programme_list, name='programme_list'),
     path('dashboard/programmes/create/', portal_views.programme_create, name='programme_create'),
@@ -49,6 +51,9 @@ urlpatterns = [
 
     path('dashboard/documents/', portal_views.document_list, name='document_list'),
     path('dashboard/documents/create/', portal_views.document_create, name='document_create'),
+    path('dashboard/documents/<int:pk>/preview/', document_file_views.document_preview, name='document_preview'),
+    path('dashboard/documents/<int:pk>/download/', document_file_views.document_download, name='document_download'),
+    path('media/documents/<path:file_path>', document_file_views.blocked_document_media),
 
     path('dashboard/content/', portal_views.content_home, name='content_home'),
     path('dashboard/content/sections/<int:pk>/edit/', portal_views.content_section_edit, name='content_section_edit'),
@@ -67,3 +72,34 @@ urlpatterns = [
 
     path('dashboard/audit-log/', portal_views.audit_log_list, name='audit_log_list'),
 ]
+
+
+# BEGIN TEMPORARILY DISABLED MODULES
+from django.http import HttpResponseForbidden
+from django.urls import resolve
+
+
+def module_disabled(request, *args, **kwargs):
+    return HttpResponseForbidden("This module is temporarily disabled.")
+
+
+_disabled_prefixes = (
+    'dashboard/referrals/', 'dashboard/donations/',
+    'dashboard/content/', 'dashboard/audit-log/',
+)
+for _pattern in urlpatterns:
+    if str(_pattern.pattern).startswith(_disabled_prefixes):
+        _pattern.callback = module_disabled
+
+# Keep other reports available, but block exports for disabled modules.
+for _pattern in urlpatterns:
+    if _pattern.name == 'report_export':
+        _original_report_export = _pattern.callback
+
+        def restricted_report_export(request, report_type, *args, **kwargs):
+            if report_type in {'referrals', 'outreach', 'impact'}:
+                return module_disabled(request)
+            return _original_report_export(request, report_type, *args, **kwargs)
+
+        _pattern.callback = restricted_report_export
+# END TEMPORARILY DISABLED MODULES

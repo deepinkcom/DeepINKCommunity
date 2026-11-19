@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
 class BeneficiaryCategory(models.TextChoices):
     YOUTH = 'youth', 'Youth'
@@ -19,26 +20,120 @@ class RequestStatus(models.TextChoices):
     ASSIGNED = 'assigned', 'Assigned'
     IN_PROGRESS = 'in_progress', 'In Progress'
     REFERRED = 'referred', 'Referred'
+    APPROVED = 'approved', 'Approved'
     CLOSED = 'closed', 'Closed'
     REJECTED = 'rejected', 'Rejected'
 
 
 class Beneficiary(models.Model):
+
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
+    ]
+
+    RELATIONSHIP_CHOICES = [
+        ('Mother', 'Mother'),
+        ('Father', 'Father'),
+        ('Grandparent', 'Grandparent'),
+        ('Legal Guardian', 'Legal Guardian'),
+        ('Other', 'Other'),
+    ]
+
+    phone_validator = RegexValidator(
+        regex=r'^[0-9]{10}$',
+        message='Enter exactly 10 digits.'
+    )
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=20, blank=True)
-    phone = models.CharField(max_length=30, blank=True)
+
+    gender = models.CharField(
+        max_length=20,
+        choices=GENDER_CHOICES,
+        blank=True
+    )
+
+    country_code = models.CharField(
+        max_length=10,
+        default='+27'
+    )
+
+    phone = models.CharField(
+        max_length=30,
+        validators=[phone_validator],
+        blank=True
+    )
+
     email = models.EmailField(blank=True)
+
+    # Residential address
     address = models.TextField(blank=True)
+
+    address_line_1 = models.CharField(
+        'Street address',
+        max_length=255,
+        blank=True
+    )
+
+    address_line_2 = models.CharField(
+        'Complex / Unit number',
+        max_length=255,
+        blank=True
+    )
+
+    suburb = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    province = models.CharField(max_length=100, blank=True)
+    postal_code = models.CharField(max_length=10, blank=True)
+
+    country = models.CharField(
+        max_length=100,
+        default='South Africa'
+    )
+
+    # Parent / Guardian information
+    guardian_first_name = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    guardian_last_name = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    guardian_relationship = models.CharField(
+        max_length=50,
+        choices=RELATIONSHIP_CHOICES,
+        blank=True
+    )
+
+    guardian_country_code = models.CharField(
+        max_length=10,
+        default='+27'
+    )
+
+    guardian_phone = models.CharField(
+        max_length=30,
+        validators=[phone_validator],
+        blank=True
+    )
+
+    guardian_email = models.EmailField(blank=True)
+
     category = models.CharField(
         max_length=30,
         choices=BeneficiaryCategory.choices,
         default=BeneficiaryCategory.OTHER,
     )
+
     support_needs = models.TextField(blank=True)
     notes = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
+
     registered_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -46,8 +141,78 @@ class Beneficiary(models.Model):
         blank=True,
         related_name='registered_beneficiaries',
     )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['last_name', 'first_name']
+        verbose_name_plural = 'Beneficiaries'
+        permissions = [
+            ('manage_beneficiaries', 'Can manage beneficiaries'),
+        ]
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
+    @property
+    def age(self):
+        if not self.date_of_birth:
+            return None
+
+        today = timezone.localdate()
+
+        return today.year - self.date_of_birth.year - (
+            (today.month, today.day) <
+            (self.date_of_birth.month, self.date_of_birth.day)
+        )
+
+    @property
+    def full_phone(self):
+        if not self.phone:
+            return ''
+
+        number = self.phone
+
+        if self.country_code == '+27' and number.startswith('0'):
+            number = number[1:]
+
+        return f'{self.country_code} {number}'
+
+    def clean(self):
+        super().clean()
+
+        errors = {}
+
+        if not self.date_of_birth:
+            errors['date_of_birth'] = 'Date of birth is required.'
+
+        elif self.date_of_birth > timezone.localdate():
+            errors['date_of_birth'] = (
+                'Date of birth cannot be in the future.'
+            )
+
+        elif self.age < 18:
+            required_fields = [
+                'guardian_first_name',
+                'guardian_last_name',
+                'guardian_relationship',
+                'guardian_country_code',
+                'guardian_phone',
+            ]
+
+            for field in required_fields:
+                if not getattr(self, field):
+                    errors[field] = (
+                        'Required for beneficiaries under 18.'
+                    )
+
+        if errors:
+            raise ValidationError(errors)
 
     class Meta:
         ordering = ['last_name', 'first_name']
@@ -115,6 +280,15 @@ class ServiceRequest(models.Model):
         blank=True,
         related_name='assigned_requests',
     )
+    approved_staff = models.OneToOneField(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='approved_staff_application',
+    editable=False,
+)
+
     consent_given = models.BooleanField(default=False)
     submitted_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

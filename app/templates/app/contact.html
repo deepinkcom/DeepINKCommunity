@@ -3,6 +3,16 @@
 
 {% block content %}
 
+<style>
+.public-form .phone-fields {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;align-items:start;}
+.public-form .phone-fields select,.public-form .phone-fields input{width:100%;min-width:0;}
+.public-form .validation-errors {color:#a12632;font-size:.9rem;margin-top:6px;}
+.public-form .validation-errors ul {padding-left:18px;margin:4px 0;}
+.public-form .phone-hint {display:block;color:#53636b;font-size:.82rem;margin-top:5px;}
+@media(max-width:480px){.public-form .phone-fields{grid-template-columns:1fr;}}
+</style>
+
+
 <!-- Contact Hero -->
         <section class="contact-hero">
             <div class="container">
@@ -44,98 +54,67 @@
 
                             <form class="public-form contact-form" id="contactForm" method="post" action="{% url 'contact' %}">
                                 {% csrf_token %}
+                            {% if contact_form.errors %}<div class="alert alert-danger" role="alert">Please correct the fields below and submit again. {{ contact_form.non_field_errors }}</div>{% endif %}
                                 <div class="row g-3">
 
                                     <div class="col-md-6">
-                                        <label for="contactFirstName">
+                                        <label for="{{ contact_form.firstName.id_for_label }}">
                                             First name
                                         </label>
 
-                                        <input type="text" id="contactFirstName" name="firstName" required>
+                                        {{ contact_form.firstName }}<div class="validation-errors">{{ contact_form.firstName.errors }}</div>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="contactLastName">
+                                        <label for="{{ contact_form.lastName.id_for_label }}">
                                             Last name
                                         </label>
 
-                                        <input type="text" id="contactLastName" name="lastName" required>
+                                        {{ contact_form.lastName }}<div class="validation-errors">{{ contact_form.lastName.errors }}</div>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="contactEmail">
+                                        <label for="{{ contact_form.email.id_for_label }}">
                                             Email address
                                         </label>
 
-                                        <input type="email" id="contactEmail" name="email" required>
+                                        {{ contact_form.email }}<div class="validation-errors">{{ contact_form.email.errors }}</div>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="contactPhone">
+                                        <label for="{{ contact_form.phone.id_for_label }}">
                                             Phone number
                                         </label>
 
-                                        <input type="tel" id="contactPhone" name="phone">
+                                        <div class="phone-fields"><div><label class="visually-hidden" for="{{ contact_form.country_code.id_for_label }}">Country calling code</label>{{ contact_form.country_code }}<div class="validation-errors">{{ contact_form.country_code.errors }}</div></div><div>{{ contact_form.phone }}<div class="validation-errors">{{ contact_form.phone.errors }}</div></div></div><small class="phone-hint">Enter exactly 10 digits, without spaces. South Africa: e.g. 0821234567.</small>
                                     </div>
 
                                     <div class="col-12">
-                                        <label for="contactSubject">
+                                        <label for="{{ contact_form.subject.id_for_label }}">
                                             Subject
                                         </label>
 
-                                        <select id="contactSubject" name="subject" required>
-                                            <option value="">
-                                                Select a subject
-                                            </option>
-
-                                            <option value="general">
-                                                General enquiry
-                                            </option>
-
-                                            <option value="programme">
-                                                Programme enquiry
-                                            </option>
-
-                                            <option value="support">
-                                                Support enquiry
-                                            </option>
-
-                                            <option value="volunteer">
-                                                Volunteering
-                                            </option>
-
-                                            <option value="partnership">
-                                                Partnership
-                                            </option>
-
-                                            <option value="donor">
-                                                Donor enquiry
-                                            </option>
-
-                                            <option value="other">
-                                                Other
-                                            </option>
-                                        </select>
+                                        {{ contact_form.subject }}<div class="validation-errors">{{ contact_form.subject.errors }}</div>
                                     </div>
 
                                     <div class="col-12">
-                                        <label for="contactMessage">
+                                        <label for="{{ contact_form.message.id_for_label }}">
                                             Message
                                         </label>
 
-                                        <textarea id="contactMessage" name="message" rows="6" required></textarea>
+                                        {{ contact_form.message }}<div class="validation-errors">{{ contact_form.message.errors }}</div>
                                     </div>
 
                                     <div class="col-12">
                                         <label class="consent-field">
-                                            <input type="checkbox" name="consent" required>
+                                            {{ contact_form.consent }}
 
                                             <span>
                                                 I consent to Deep Ink using my
                                                 information to respond to this
                                                 enquiry.
                                             </span>
-                                        </label>
+                                        </label><div class="validation-errors">{{ contact_form.consent.errors }}</div>
                                     </div>
 
                                     <div class="col-12">
